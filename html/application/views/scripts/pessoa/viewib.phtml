@@ -1,0 +1,29 @@
+<section class="panel">
+    <header class="panel-heading">Visualização de Pessoa > Informações Bancárias</header>
+    <div class="panel-body">
+        <dl class="dl-horizontal">
+            <dt>ID:</dt>
+            <dd><?php echo $this->registro->getId(); ?></dd>
+        </dl>
+        <dl class="dl-horizontal">
+            <dt>Pessoa:</dt>
+            <dd><?php echo $this->pessoa->toString(); ?></dd>
+        </dl>
+        <dl class="dl-horizontal">
+            <dt>Tipo:</dt>
+            <dd><?php echo $this->ib->findParentRow("TbInfoBancariaTipo")->toString(); ?></dd>
+        </dl>
+        <dl class="dl-horizontal">
+            <dt>Banco:</dt>
+            <dd><?php echo $this->ib->findParentRow("TbBanco")->toString(); ?></dd>
+        </dl>
+        <dl class="dl-horizontal">
+            <dt>Agência:</dt>
+            <dd><?php echo $this->ib->mostrar_agencia(); ?></dd>
+        </dl>
+        <dl class="dl-horizontal">
+            <dt>Número:</dt>
+            <dd><?php echo $this->ib->mostrar_conta(); ?></dd>
+        </dl>
+    </div>
+</section>

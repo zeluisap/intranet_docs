@@ -1,0 +1,94 @@
+
+<section class="panel">
+    <header class="panel-heading">CADASTRO DE TRANSPORTES</header>
+    <div class="panel-body">
+        <form action="<?php echo $this->url(array("controller" => $this->getRequest()->getControllerName(), "action" => "editar")); ?>" method="post" id="formulario" class="formulario">
+            <input type="hidden" name="id" id="id" value="<?php echo $this->registro->getId(); ?>" />
+            <?php if ($this->registro->getId()) { ?>
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label for="codigo">Código:</label>
+                        <input type="text" name="codigo" id="codigo" maxlength="10" value="<?php echo $this->registro->getId(); ?>" class="form-control" disabled/>
+                    </div>
+                </div>
+            <?php } ?>
+            <div class="col-md-4">
+                <?php
+                $ctrl = new Escola_Form_Element_Select_Table("id_transporte_grupo");
+                $ctrl->setPkName("id_transporte_grupo");
+                $ctrl->setModel("TbTransporteGrupo");
+                $ctrl->setValue($this->transporte->id_transporte_grupo);
+                $ctrl->setLabel("Grupo de Transporte: ");
+                $ctrl->setAttrib('class', 'form-control');
+                echo $ctrl->render($this);
+                if (!$this->transporte->getId()) {
+                    $ctrl = new Escola_Form_Element_Select_Table_Pessoa("id_pessoa");
+                    $ctrl->setLabel("Proprietário:");
+                    if ($this->registro instanceof Taxi) {
+                        $ctrl->setValue($this->registro->id_pessoa);
+                    }
+                    echo $ctrl->render($this);
+                }
+                ?>
+            </div>
+            <div class="col-md-4">
+                <div class="form-group">
+                    <label for="codigo">Código:</label>
+                    <input type="text" name="codigo" id="codigo" value="<?php echo $this->transporte->codigo; ?>" class="form-control" />
+                </div>
+            </div>
+            <div class="col-md-4">
+                <?php
+                $ctrl = new Escola_Form_Element_Select_Table("id_concessao_tipo");
+                $ctrl->setPkName("id_concessao_tipo");
+                $ctrl->setModel("TbConcessaoTipo");
+                $ctrl->setValue($this->concessao->id_concessao_tipo);
+                $ctrl->setLabel("Tipo de Concessão: ");
+                $ctrl->setAttrib('class', 'form-control');
+                echo $ctrl->render($this);
+                ?>
+            </div>
+            <div class="col-md-4">
+                <div class="form-group">
+                    <label for="concessao_data">Data da Concessão:</label>
+                    <input type="text" name="concessao_data" id="concessao_data" class="form-control data" value="<?php echo Escola_Util::formatData($this->concessao->concessao_data); ?>" />
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="form-group">
+                    <label for="numero">Número:</label>
+                    <input type="text" name="numero" id="numero" class="form-control" value="<?php echo $this->concessao->numero; ?>" />
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="form-group">
+                    <label for="decreto">Decreto:</label>
+                    <input type="text" name="decreto" id="decreto" class="form-control" value="<?php echo $this->concessao->decreto; ?>" />
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="form-group row">
+                    <div class="col-md-8">
+                    <label for="processo_numero">Número / Ano do Processo:</label>
+                    <input type="text" name="processo_numero" id="processo_numero" class="form-control" value="<?php echo $this->concessao->processo_numero; ?>" />
+                    </div>
+                    <div class="col-md-4">
+                        <label for="processo_ano">&nbsp;</label>
+                        <input type="text" name="processo_ano" id="processo_ano" class="form-control" value="<?php echo $this->concessao->processo_ano; ?>" />
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <?php
+                $ctrl = new Escola_Form_Element_Select_Table("id_concessao_validade");
+                $ctrl->setPkName("id_concessao_validade");
+                $ctrl->setModel("TbConcessaoValidade");
+                $ctrl->setValue($this->concessao->id_concessao_validade);
+                $ctrl->setLabel("Validade da Concessão: ");
+                $ctrl->setAttrib('class', 'form-control');
+                echo $ctrl->render($this);
+                ?>
+            </div>
+        </form>
+    </div>
+</section>

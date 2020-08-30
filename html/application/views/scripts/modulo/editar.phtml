@@ -1,0 +1,93 @@
+<section class="panel">
+    <header class="panel-heading">
+        Módulo
+    </header>
+    <div class="panel-body">
+	<form action="<?php echo $this->url(array("controller" => "modulo", "action" => "editar")); ?>" method="post" id="formulario" class="formulario">
+		<input type="hidden" name="id" id="id" value="<?php echo $this->mod->id_modulo; ?>" />	
+		<?php if ($this->mod->id_modulo) { ?>
+		<div class="col-md-4">
+			<div class="form-group">
+				<label for="descricao">Código:</label>
+				<input type="text" name="descricao" id="descricao" maxlength="60" value="<?php echo $this->mod->id_modulo; ?>" class="form-control" disabled />
+			</div>
+		</div>
+		<?php } ?>
+		<div class="col-md-4">
+			<div class="form-group">
+				<label for="descricao">Descrição.:</label>
+				<input type="text" name="descricao" id="descricao" maxlength="60" value="<?php echo $this->mod->descricao; ?>" class="form-control" />
+			</div>
+		</div>
+		<div class="col-md-4">
+			<div class="form-group">
+				<label for="controller">Controller:</label>
+				<input type="text" name="controller" id="controller" maxlength="60" value="<?php echo $this->mod->controller; ?>" class="form-control" />
+			</div>
+		</div>
+		<div class="col-md-4">
+			<div class="form-group">
+				<label for="action">Action:</label>	
+				<input type="text" name="action" id="action" maxlength="60" value="<?php echo $this->mod->action; ?>" class="form-control" /> (*) Em branco para Action Padrão.
+			</div>
+		</div>
+		<div class="col-md-4">
+		<?php
+			$ctrl = new Escola_Form_Element_Icone("icon");
+			$ctrl->setAttrib("id", "pacote_modulo");
+			$ctrl->setValue($this->mod->icon);
+			echo $ctrl->render($this);
+			$tb = new TbModulo();
+			$todos = $tb->listarTodos();
+			if ($todos) {
+		?>
+		</div>
+		<div class="col-md-4">
+			<div class="form-group">
+				<label for="id_modulo_superior">Módulo Superior:</label>
+				<select name="id_modulo_superior" id="id_modulo_superior" class="form-control">
+					<option value="" <?php echo (!$this->mod->id_modulo_superior)?"selected":""; ?>>==> SELECIONE <==</option>
+					<?php foreach ($todos as $mod) { ?>
+					<option value="<?php echo $mod->getId(); ?>" <?php echo ($mod->getId() == $this->mod->id_modulo_superior)?"selected":""; ?>><?php echo $mod->toString(); ?></option>
+					<?php } ?>
+				</select>
+			</div>
+		</div>
+		<?php } ?>
+		<div class="col-md-4">
+			<div class="form-group">
+				<label for="resumo">Status:</label>
+				<select name="status" id="status" class="form-control">
+					<option value="A" <?php echo ($this->mod->ativo())?"selected":""; ?>>ATIVO</option>
+					<option value="I" <?php echo ($this->mod->inativo())?"selected":""; ?>>INATIVO</option>                                                            
+				</select> 
+			</div>                 
+		</div>
+		<?php if ($this->mod->getId()) { ?>
+			<div class="col-md-4">
+				<div class="form-group">
+				<label for="ordem">Ordem:</label>
+				<select name="ordem" id="ordem" class="form-control">
+				<?php for ($i = 1; $i <= Modulo::pegaProximaOrdem(); $i++) { ?>
+					<option value="<?php echo $i; ?>" <?php echo ($i == $this->mod->ordem)?"selected":""; ?>><?php echo $i; ?></option>
+				<?php } ?>
+				</select>
+				</div>
+			</div>
+			<?php } else { 
+			$tb = new TbPacote();
+			$pacotes = $tb->listar();
+			if ($pacotes && count($pacotes)) {
+			?>
+			<div class="col-md-4">
+				<div class="form-group">
+				<label>Pacotes:</label>
+				<?php foreach ($pacotes as $pacote) { ?>
+					<input type="checkbox" name="id_pacote[]" id="id_pacote_<?php echo $pacote->getId(); ?>" value="<?php echo $pacote->getId(); ?>" /><?php echo $pacote->toString(); ?>.
+				<?php } ?>
+				</div>
+			</div>
+			<?php }} ?>
+			</form>
+			</div>
+</section>

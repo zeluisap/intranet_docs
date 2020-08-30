@@ -1,0 +1,165 @@
+version: "3"
+services:
+  intranet_sttrans_db:
+    image: mariadb
+    container_name: intranet_sttrans_db
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: s0laris
+    volumes:
+      - "./intranet_sttrans/volumes/mysql/intranet:/var/lib/mysql"
+      - "./intranet_sttrans/intranet_sttrans.sql:/docker-entrypoint-initdb.d/intranet_sttrans.sql"
+
+  intranet_sttrans_db_legado:
+    image: mariadb
+    container_name: intranet_sttrans_db_legado
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: s0laris
+    volumes:
+      - "./intranet_sttrans/volumes/mysql/intranet_legado:/var/lib/mysql"
+      - "./intranet_sttrans/intranet_sttrans_legado.sql:/docker-entrypoint-initdb.d/intranet_sttrans.sql"
+
+  intranet_sttrans_db_log:
+    image: mariadb
+    container_name: intranet_sttrans_db_log
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: s0laris
+    volumes:
+      - "./intranet_sttrans/volumes/mysql/intranet_db:/var/lib/mysql"
+      - "./intranet_sttrans/intranet_sttrans_log.sql:/docker-entrypoint-initdb.d/intranet_sttrans_log.sql"
+
+  intranet_sttrans_site:
+    build:
+      context: ./intranet_sttrans
+      dockerfile: intranet.dockerfile
+    image: intranet_sttrans_site
+    container_name: intranet_sttrans_site
+    restart: always
+    volumes:
+      - ./intranet_sttrans/html_sttrans:/var/www/html
+    depends_on:
+      - intranet_sttrans_db
+      - intranet_sttrans_db_log
+
+  proxy:
+    build:
+      context: ./httpd
+      dockerfile: httpd.dockerfile
+    image: proxy
+    container_name: proxy
+    restart: always
+    ports:
+      - "80:80"
+      # do quintal - app aluno rafael
+  do_quintal:
+    build:
+      context: ./doquintal-api-v2
+    image: do_quintal
+    container_name: do_quintal
+    environment:
+      - NODE_ENV=development
+      - TZ=America/Belem
+    restart: always
+    volumes:
+      - "./doquintal-api-v2:/app"
+    expose:
+      - 3333
+      # malha app nest
+  mongo:
+    image: mongo
+    container_name: app_mongo
+    restart: always
+    volumes:
+      - "./kapuca/volumes/db/app-mongo:/data/db"
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: zeluis
+      MONGO_INITDB_ROOT_PASSWORD: s0laris
+      TZ: America/Belem
+
+  mongo-express:
+    image: mongo-express
+    container_name: app_mongo_express
+    restart: always
+    environment:
+      ME_CONFIG_MONGODB_ADMINUSERNAME: zeluis
+      ME_CONFIG_MONGODB_ADMINPASSWORD: s0laris
+      TZ: America/Belem
+
+  agenda_db:
+    image: postgres
+    container_name: app_agenda_db
+    restart: always
+    environment:
+      POSTGRES_DB: agenda
+      POSTGRES_PASSWORD: s0laris
+      TZ: America/Belem
+    volumes:
+      - "./kapuca/volumes/db/agenda:/var/lib/postgresql/data"
+
+  agenda_config:
+    build:
+      context: ./kapuca/agenda-config
+    image: app_agenda_config
+    container_name: app_agenda_config
+    environment:
+      - NODE_ENV=production
+      - TZ=America/Belem
+    restart: always
+    volumes:
+      - "./kapuca/agenda-config:/app"
+    expose:
+      - 3333
+
+  agenda:
+    build:
+      context: ./kapuca/agenda
+    image: app_agenda
+    container_name: app_agenda
+    environment:
+      - NODE_ENV=production
+      - TZ=America/Belem
+    restart: always
+    volumes:
+      - "./kapuca/agenda:/app"
+
+  repositorio:
+    build:
+      context: ./kapuca/repositorio
+    image: app_repositorio
+    container_name: app_repositorio
+    environment:
+      - NODE_ENV=development
+      - TZ=America/Belem
+    restart: always
+    volumes:
+      - "./kapuca/repositorio:/app"
+    expose:
+      - 3004
+      # dropship app
+  app-dropship:
+    build:
+      context: ./kapuca/dropship_back
+    image: app_dropship
+    container_name: app_dropship
+    environment:
+      - NODE_ENV=development
+      - TZ=America/Belem
+    restart: always
+    volumes:
+      - "./kapuca/dropship_back:/app"
+    expose:
+      - 3003
+
+  app_dropship_front:
+    image: httpd:2.4
+    container_name: app_dropship_front
+    environment:
+      - TZ=America/Belem
+    restart: always
+    volumes:
+      - "./kapuca/httpd.conf:/usr/local/apache2/conf/httpd.conf"
+      - "./kapuca/dropship_front:/usr/local/apache2/htdocs"
+    expose:
+      - 80

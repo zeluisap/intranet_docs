@@ -1,0 +1,108 @@
+<section class="panel">
+    <header class="panel-heading">CADASTRO DE VÍNCULO DE SERVIÇO</header>
+    <div class="panel-body">
+        <form action="<?php echo $this->url(array("controller" => $this->getRequest()->getControllerName(), "action" => "editarvinculo")); ?>" method="post" id="formulario" class="formulario">
+            <input type="hidden" name="id" id="id" value="<?php echo $this->registro->getId(); ?>" />
+            <input type="hidden" name="id_servico" id="id_servico" value="<?php echo $this->servico->getId(); ?>" />
+            <div class="col-md-4">
+                <div class="form-group">
+                    <label for="codigo">Serviço:</label>
+                    <input type="text" name="Serviço" id="Serviço" maxlength="60" value="<?php echo $this->servico->toString(); ?>" class="form-control" disabled/>
+                </div>
+            </div>
+            <?php if ($this->registro->getId()) { ?>
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label for="codigo">Código:</label>
+                        <input type="text" name="codigo" id="codigo" maxlength="60" value="<?php echo $this->registro->getId(); ?>" class="form-control" disabled/>
+                    </div>
+                </div>
+            <?php } ?>
+            <?php
+            if ($this->servico->transporte()) { ?>
+                <div class="col-md-4">
+                    <?php
+                    $ctrl = new Escola_Form_Element_Select_Table("id_transporte_grupo");
+                    $ctrl->setPkName("id_transporte_grupo");
+                    $ctrl->setModel("TbTransporteGrupo");
+                    $ctrl->setValue($this->registro->id_transporte_grupo);
+                    $ctrl->setLabel("Grupo de Transporte: ");
+                    $ctrl->setAttrib('class', 'form-control');
+                    echo $ctrl->render($this);
+                    ?>
+                </div>
+            <?php } ?>
+
+            <?php
+            $tb = new TbPeriodicidade();
+            $pers = $tb->listar();
+            if ($pers) {
+                ?>
+
+                    <script type="text/javascript">
+                        var periodicidades = [];
+                    </script>
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label for="id_periodicidade">Periodicidade:</label>
+                        <select name="id_periodicidade" id="id_periodicidade" class="form-control">
+                            <option value="" <?php echo (!$this->registro->id_periodicidade)?"selected":""; ?>>==> SELECIONE <==</option>
+                            <?php foreach ($pers as $per) { ?>
+                                <script type="text/javascript">
+                                    periodicidades[<?php echo $per->getId(); ?>] = "<?php echo $per->qtd_meses; ?>";
+                                </script>
+                                <option value="<?php echo $per->getId(); ?>" <?php echo ($per->getId() == $this->registro->id_periodicidade)?"selected":""; ?>><?php echo $per->toString(); ?></option>
+                            <?php } ?>
+                        </select>
+                    </div>
+                </div>
+                <div class="col-md-4" id="linha_mes_referencia">
+                    <div class="form-group" >
+                        <label for="mes_referencia">Mês Referência:</label>
+                        <select name="mes_referencia" id="mes_referencia" class="form-control">
+                            <option value="" <?php echo (!$this->registro->mes_referencia)?"selected":""; ?>>==> NENHUM <==</option>
+                            <?php
+                            $meses = Escola_Util::pegaMeses();
+                            foreach ($meses as $mes => $desc_mes) {
+                                ?>
+                                <option value="<?php echo $mes; ?>" <?php echo ($mes == $this->registro->mes_referencia)?"selected":""; ?>><?php echo $desc_mes; ?></option>
+                            <?php } ?>
+                        </select>
+                    </div>
+                </div>
+            <?php } ?>
+            <div class="col-md-4">
+                <?php echo $this->registro->pega_valor()->render($this); ?>
+            </div>
+            <div class="col-md-4">
+                <div class="form-group">
+                    <label for="validade_dias">Validade em Dias:</label>
+                    <input type="text" name="validade_dias" id="validade_dias" maxlength="5" value="<?php echo $this->registro->validade_dias; ?>" class="form-control" /> (*) Somente Números
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="form-group">
+                    <label for="vencimento_dias">Dias para o Vencimento:</label>
+                    <input type="text" name="vencimento_dias" id="vencimento_dias" maxlength="5" value="<?php echo $this->registro->vencimento_dias; ?>" class="form-control" /> (*) Somente Números
+                </div>
+            </div>
+            <div class="col-md-4">
+                <label for="valor">Juros por Dia</label>
+                <div class="input-group">
+                    <span class="input-group-btn"><a href="#" class="btn btn-white">R$</a></span>
+                    <input type="text" name="juros_dia" id="juros_dia" class="moeda form-control" value="<?php echo Escola_Util::number_format($this->registro->juros_dia); ?>" />
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="form-group">
+                    <label for="obrigatorio">Obrigatório:</label>
+                    <select name="obrigatorio" id="obrigatorio" class="form-control">
+                        <option value="">==> SELECIONE <==</option>
+                        <option value="S" <?php echo ($this->registro->obrigatorio == "S")?"selected":""; ?>>SIM</option>
+                        <option value="N" <?php echo ($this->registro->obrigatorio == "N")?"selected":""; ?>>NÃO</option>
+                    </select>
+                </div>
+            </div>
+        </form>
+    </div>
+</section>

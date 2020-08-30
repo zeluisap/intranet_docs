@@ -1,0 +1,15 @@
+<section class="panel">
+    <header class="panel-heading">
+	Módulo: <?php echo $this->modulo_atual->getId(); ?> - <?php echo $this->modulo_atual->toString(); ?>
+    </header>
+	<div class="panel-body">
+		<dl class="dl-horizontal">
+			<dt>Descrição:</dt>
+			<dd><?php echo $this->acao_atual->descricao; ?></dd>
+			<dt>Ação:</dt>
+			<dd><?php echo $this->acao_atual->action; ?></dd>
+			<dt>Principal:</dt>
+			<dd><?php echo $this->acao_atual->mostrarPrincipal(); ?></dd>
+		</dl>
+	</div>
+</section>

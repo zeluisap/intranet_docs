@@ -1,0 +1,26 @@
+<section class="panel">
+    <header class="panel-heading">Visualização de Transporte > Pessoa</header>
+    <div class="panel-body">
+        <dl class="dl-horizontal">
+            <dt>Id:</dt>
+            <dd><?php echo $this->registro->getId(); ?></dd>
+        </dl>
+        <dl class="dl-horizontal">
+            <dt>Transporte:</dt>
+            <dd><?php echo $this->registro->findParentRow("TbTransporte")->toString(); ?></dd>
+        </dl>
+        <dl class="dl-horizontal">
+            <dt>Tipo:</dt>
+            <dd><?php echo $this->registro->findParentRow("TbTransportePessoaTipo")->toString(); ?></dd>
+        </dl>
+        <dl class="dl-horizontal">
+            <dt>Pessoa:</dt>
+            <dd><?php echo $this->pessoa->toString(); ?></dd>
+        </dl>
+        <dl class="dl-horizontal">
+            <dt>Status:</dt>
+            <dd><?php echo $this->registro->findParentRow("TbTransportePessoaStatus")->toString(); ?></dd>
+        </dl>
+        <?php echo $this->pessoa->mostrarTabelaNotificacao(); ?>
+    </div>
+</section>

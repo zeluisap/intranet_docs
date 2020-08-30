@@ -1,0 +1,29 @@
+<section class="panel">
+    <header class="panel-heading">Visualização de Referência de Documento</header>
+    <div class="panel-body">
+        <dl class="dl-horizontal">
+            <dt>Documento:</dt>
+            <dd><?php echo $this->documento->toString(); ?></dd>
+        </dl>
+        <dl class="dl-horizontal">
+            <dt>C.P.F.:</dt>
+            <dd><?php echo Escola_Util::formatCPF($this->pf->cpf); ?></dd>
+        </dl>
+        <dl class="dl-horizontal">
+            <dt>Nome:</dt>
+            <dd><?php echo $this->pf->nome; ?></dd>
+        </dl>
+        <dl class="dl-horizontal">
+            <dt>Matrícula:</dt>
+            <dd><?php echo $this->funcionario->matricula; ?></dd>
+        </dl>
+        <dl class="dl-horizontal">
+            <dt>Cargo:</dt>
+            <dd><?php echo $this->funcionario->findParentRow("TbCargo")->toString(); ?></dd>
+        </dl>
+        <dl class="dl-horizontal">
+            <dt>Lotação Principal:</dt>
+            <dd><?php echo $this->funcionario->pegaLotacaoPrincipal()->findParentRow("TbSetor")->toString(); ?></dd>
+        </dl>
+    </div>
+</section>

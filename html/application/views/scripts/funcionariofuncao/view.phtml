@@ -1,0 +1,30 @@
+<section class="panel">
+    <header class="panel-heading">Visualizar Função Gratificada</header>
+    <div class="panel-body">
+        <dl class="dl-horizontal">
+            <dt>Código:</dt>
+            <dd><?php echo $this->registro->getId(); ?></dd>
+        </dl>
+        <?php
+        $funcionario = $this->registro->pegaFuncionario();
+        if ($funcionario) {
+            ?>
+            <dl class="dl-horizontal">
+                <dt>Funcionario Vinculado:</dt>
+                <dd><?php echo $funcionario->toString(); ?></dd>
+            </dl>
+        <?php } ?>
+        <dl class="dl-horizontal">
+            <dt>Código:</dt>
+            <dd><?php echo $this->registro->codigo; ?></dd>
+        </dl>
+        <dl class="dl-horizontal">
+            <dt>Descrição:</dt>
+            <dd><?php echo $this->registro->descricao; ?></dd>
+        </dl>
+        <dl class="dl-horizontal">
+            <dt>Tipo:</dt>
+            <dd><?php echo $this->registro->findParentRow("TbFuncionarioFuncaoTipo")->toString(); ?></dd>
+        </dl>
+    </div>
+</section>

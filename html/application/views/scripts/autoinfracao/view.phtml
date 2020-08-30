@@ -1,0 +1,27 @@
+<section class="panel">
+    <header class="panel-heading">Visualizar Autos de Infração</header>
+    <div class="panel-body">
+        <?php echo $this->registro->view($this); ?>
+    </div>
+</section>
+<div id="janela_notificacao" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h4 id="myModalLabel" class="modal-title">Visualizar Notificação</h4>
+            </div>
+            <div class="modal-body"></div>
+            <div class="modal-footer">
+                <button class="btn" data-dismiss="modal" aria-hidden="true">Fechar</button>
+            </div>
+        </div>
+        <div class="conteudo_controller">
+            <div class="row-fluid">
+                <div class="span12">
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

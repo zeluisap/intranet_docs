@@ -1,0 +1,46 @@
+<section class="panel">
+    <header class="panel-heading">
+        BAIXA DE VEÍCULO
+    </header>
+    <div class="panel-body">
+        <form action="<?php echo $this->url(array("controller" => $this->getRequest()->getControllerName(), "action" => "baixa")); ?>" method="post" id="formulario" class="formulario">
+            <input type="hidden" name="id" id="id" value="<?php echo $this->registro->getId(); ?>" />
+            <?php if ($this->registro->getId()) { ?>
+                <dl class="dl-horizontal">
+                    <dt>Código:</dt>
+                    <dd><?php echo $this->registro->getId(); ?></dd>
+                </dl>
+            <?php } ?>
+            <dl class="dl-horizontal">
+                <dt>Transporte:</dt>
+                <dd><?php echo $this->transporte->toString(); ?></dd>
+            </dl>
+            <dl class="dl-horizontal">
+                <dt>Veículo:</dt>
+                <dd><?php echo $this->registro->findParentRow("TbVeiculo")->toString(); ?></dd>
+            </dl>
+            <div class="col-md-4">
+                <div class="form-group">
+                    <label for="baixa_data">Data da Baixa:</label>
+                    <input type="text" name="baixa_data" id="baixa_data" class="form-control data" value="<?php echo date("d/m/Y"); ?>" />
+                </div>
+            </div>
+            <div class="col-md-4">
+                <?php
+                $ctrl = new Escola_Form_Element_Select_Table("id_baixa_motivo");
+                $ctrl->setPkName("id_baixa_motivo");
+                $ctrl->setModel("TbBaixaMotivo");
+                $ctrl->setLabel("Motivo da Baixa:");
+                $ctrl->setAttrib('class', 'form-control');
+                echo $ctrl->render($this);
+                ?>
+            </div>
+            <div class="col-md-4">
+                <div class="form-group">
+                    <label for="motivo">Observações:</label>
+                    <textarea name="motivo" id="motivo" rows="6" class="form-control"></textarea>
+                </div>
+            </div>
+        </form>
+    </div>
+</section>

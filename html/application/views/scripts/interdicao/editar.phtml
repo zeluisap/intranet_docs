@@ -1,0 +1,132 @@
+<style type="text/css">
+<?php if (!$this->interdicao->getId()) { ?>
+.linha_dados, #linha_id_pessoa_fisica, #linha_id_pessoa_juridica{
+    display:none;
+}
+<?php } ?>
+</style>
+
+<section class="panel">
+    <header class="panel-heading">
+        ADICIONAR SOLICITAÇÃO DE INTERDIÇÃO
+    </header>
+    <div class="panel-body">
+        <form action="<?php echo $this->url(array("controller" => $this->getRequest()->getControllerName(), "action" => $this->getRequest()->getActionName())); ?>" method="post" id="formulario" class="formulario">
+            <input type="hidden" name="id_servico_transporte_grupo" id="id_servico_transporte_grupo" value="<?php echo $this->stg->getId(); ?>" />
+            <dl class="dl-horizontal">
+                <dt>Serviço:</dt>
+                <dd><?php echo $this->stg->toString(); ?></dd>
+            </dl>
+            <div class="col-md-4">
+                <div class="form-group">
+                    <label for="titulo">Título:</label>
+                    <input type="text" name="titulo" id="titulo" class="form-control" value="<?php echo $this->interdicao->titulo; ?>" />
+                </div>
+            </div>
+            <div class="col-md-4">
+            <?php
+            $pt = false;
+            $pessoa = $this->interdicao->findParentRow("TbPessoa");
+            if ($pessoa) {
+                $pt = $pessoa->findParentRow("TbPessoaTipo");
+                $filho = $pessoa->pegaPessoaFilho();
+            }
+            $ctrl = new Escola_Form_Element_Select_Table("id_pessoa_tipo");
+            $ctrl->setAttrib("class", "filtro");
+            $ctrl->setPkName("id_pessoa_tipo");
+            $ctrl->setModel("TbPessoaTipo");
+            $ctrl->setLabel("Tipo de Pessoa:");
+
+            if ($pt) {
+                $ctrl->setValue($pt->getId());
+                $ctrl->setAttrib('class', 'form-control');
+                echo $ctrl->render($this);
+            }
+            ?>
+            </div>
+            <div class="col-md-4">
+            <?php
+            $ctrl = new Escola_Form_Element_Select_Table_PessoaFisica("id_pessoa_fisica");
+            $ctrl->setLabel("Pessoa Física: ");
+            if ($pt && $pt->pf() && $filho) {
+                $ctrl->setValue($filho->getId());
+                echo $ctrl->render($this);
+            }
+
+            ?>
+            </div>
+            <div class="col-md-4">
+            <?php
+
+            $ctrl = new Escola_Form_Element_Select_Table_PessoaJuridica("id_pessoa_juridica");
+            $ctrl->setLabel("Pessoa Jurídica: ");
+            if ($pt && $pt->pj() && $filho) {
+                $ctrl->setValue($filho->getId());
+                echo $ctrl->render($this);
+            }
+
+            ?>
+            </div>
+            <div class="col-md-4">
+                <div class="form-group">
+                    <label for="isento">Isento?</label>
+                    <select name="isento" id="isento" class="form-control">
+                        <option value="S" <?php echo ($this->interdicao->isento())?"selected":""; ?>>SIM</option>
+                        <option value="N" <?php echo (!$this->interdicao->isento())?"selected":""; ?>>NÃO</option>
+                    </select>
+                </div>
+            </div>
+            <?php
+            if ($this->ss) {
+                $valor = $this->ss->pega_valor()->toString();
+            } else {
+                $valor = $this->stg->pega_valor()->toString();
+            }
+            ?>
+            <div class="col-md-4">
+                <div class="form-group">
+                    <label for="ano_referencia">Ano Referência:</label>
+                    <input type="text" name="ano_referencia" id="ano_referencia" class="form-control" value="<?php echo ($this->ss)?$this->ss->ano_referencia:date("Y"); ?>" />
+                </div>
+            </div>
+            <div class="col-md-4 linha_valor">
+                <label for="valor">Valor a Pagar:</label>
+                <div class="input-group ">
+                    <div class="input-group-addon">R$</div>
+                    <input type="text" name="valor" id="valor" class="moeda form-control" value="<?php echo $valor; ?>" />
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="form-group">
+                    <label for="codigo">Número:</label>
+                    <input type="text" name="codigo" id="codigo" class="form-control" value="<?php echo ($this->ss)?$this->ss->codigo:""; ?>" />
+                    * Para Numeração automática, deixe este campo em branco.
+                </div>
+            </div>
+            <div class="col-md-4 linha_dados">
+                <div class="form-group">
+                    <label for="data_validade">Validade:</label>
+                    <input type="text" name="data_validade" id="data_validade" class="form-control data field" value="<?php echo ($this->ss)?  Escola_Util::formatData($this->ss->data_validade):""; ?>" />
+                </div>
+            </div>
+            <div class="col-md-4 linha_dados">
+                <div class="form-group">
+                    <label for="data_vencimento">Vencimento do Boleto:</label>
+                    <input type="text" name="data_vencimento" id="data_vencimento" class="form-control data field" value="<?php echo ($this->ss)?  Escola_Util::formatData($this->ss->data_vencimento):""; ?>" />
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="form-group">
+                    <label for="informacoes">Informações da Interdição (Local e Horário):</label>
+                    <textarea name="informacoes" id="informacoes" class="form-control" rows="6"><?php echo $this->interdicao->informacoes; ?></textarea>
+                </div>
+            </div>
+            <div class="col-md-4 linha_motivo">
+                <div class="form-group">
+                    <label for="isento_motivo">Motivo da Isenção:</label>
+                    <textarea name="isento_motivo" id="isento_motivo" class="form-control" rows="6"><?php echo $this->interdicao->isento_motivo; ?></textarea>
+                </div>
+            </div>
+        </form>
+    </div>
+</section>

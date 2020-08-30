@@ -1,0 +1,33 @@
+<section class="panel">
+    <header class="panel-heading">ATRIBUIR AUTO DE INFRAÇÃO:</header>
+    <div class="panel-body">
+        <form action="<?php echo $this->url(array("controller" => $this->getRequest()->getControllerName(), "action" => $this->getRequest()->getActionName())); ?>" method="post" id="formulario" class="formulario">
+            <?php if ($this->registro->getId()) { ?>
+                <input type="hidden" name="id" id="id" value="<?php echo $this->registro->getId(); ?>" />
+            <?php } ?>
+            <div class="col-md-4">
+                <div class="form-group">
+                    <label for="codigo">ID:</label>
+                    <input type="text" name="codigo" id="codigo" maxlength="60" value="<?php echo $this->registro->getId(); ?>" class="form-control" disabled/>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="form-group">
+                    <label for="codigo">Código:</label>
+                    <input type="text" name="codigo" id="codigo" maxlength="60" value="<?php echo $this->registro->mostrar_codigo(); ?>" class="form-control" disabled/>
+                </div>
+            </div>
+            <div class="col-md-4">
+            <?php
+            $ctrl = new Escola_Form_Element_Select_Table("id_agente");
+            $ctrl->setPkName("id_agente");
+            $ctrl->setModel("TbAgente");
+            $ctrl->setValue("");
+            $ctrl->setLabel("Agente:");
+            $ctrl->setAttrib("class", "form-control");
+            echo $ctrl->render($this);
+            ?>
+            </div>
+        </form>
+    </div>
+</section>

@@ -1,0 +1,46 @@
+<section class="panel">
+    <header class="panel-heading">
+        Cadastro de Moeda
+    </header>
+    <div class="panel-body">
+        <form action="<?php echo $this->url(array("controller" => $this->getRequest()->getControllerName(), "action" => "editar")); ?>" method="post" id="formulario" class="formulario">
+            <input type="hidden" name="id" id="id" value="<?php echo $this->registro->getId(); ?>" />
+            <?php if ($this->registro->getId()) { ?>
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label for="codigo">Código:</label>
+                        <input type="text" name="codigo" id="codigo" maxlength="10" value="<?php echo $this->registro->getId(); ?>" class="form-control" disabled/>
+                    </div>
+                </div>
+            <?php } ?>
+            <div class="col-md-4">
+            <div class="form-group">
+                <label for="simbolo">Símbolo:</label>
+                <input type="text" name="simbolo" id="simbolo" class="form-control" value="<?php echo $this->registro->simbolo; ?>" maxlength="5" />
+            </div>
+            </div>
+            <div class="col-md-4">
+            <div class="form-group">
+                <label for="descricao">Descrição:</label>
+                <input type="text" name="descricao" id="descricao" class="form-control" value="<?php echo $this->registro->descricao; ?>" maxlength="100" />
+            </div>
+            </div>
+            <div class="col-md-4">
+            <div class="form-group">
+                <label for="padrao">Padrão:</label>
+                    <select name="padrao" id="padrao" class="form-control">
+                        <option value="" <?php echo (!$this->registro->padrao)?"selected":""; ?>>==> SELECIONE <==</option>
+                        <option value="S" <?php echo ($this->registro->padrao == "S")?"selected":""; ?>>SIM</option>
+                        <option value="N" <?php echo ($this->registro->padrao == "N")?"selected":""; ?>>NÃO</option>
+                    </select>
+            </div>
+            </div>
+            <div class="col-md-4">
+            <div class="form-group">
+                <label for="valor_ref">Valor Referência:</label>
+                <input type="text" name="valor_ref" id="valor_ref" class="form-control moeda" value="<?php echo $this->registro->valor_ref; ?>" />
+            </div>
+            </div>
+        </form>
+    </div>
+</section>

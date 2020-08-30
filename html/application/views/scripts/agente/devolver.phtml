@@ -1,0 +1,48 @@
+<section class="panel">
+    <header class="panel-heading">DEVOLVER AUTO DE INFRAÇÃO</header>
+    <div class="panel-body">
+        <form action="<?php echo $this->url(array("controller" => $this->getRequest()->getControllerName(), "action" => $this->getRequest()->getActionName())); ?>" method="post" id="formulario" class="formulario" enctype="multipart/form-data">
+            <?php if ($this->registro->getId()) { ?>
+                <input type="hidden" name="id" id="id" value="<?php echo $this->registro->getId(); ?>" />
+            <?php } ?>
+
+                    <dl class="dl-horizontal">
+                        <dt>ID:</dt>
+                        <dd><?php echo $this->registro->getId(); ?></dd>
+                    </dl>
+                    <dl class="dl-horizontal">
+                        <dt>Código:</dt>
+                        <dd><?php echo $this->registro->findParentRow("TbServicoTipo")->toString(); ?></dd>
+                    </dl>
+                    <dl class="dl-horizontal">
+                        <dt>Código:</dt>
+                        <dd><?php echo $this->registro->mostrar_codigo(); ?></dd>
+                    </dl>
+                    <dl class="dl-horizontal">
+                        <dt>Agente:</dt>
+                        <dd><?php echo $this->agente->toString(); ?></dd>
+                    </dl>
+            <div class="col-md-4">
+                <?php
+                $ctrl = new Escola_Form_Element_Select_Table("id_auto_infracao_devolucao_status");
+                $ctrl->setPkName("id_auto_infracao_devolucao_status");
+                $ctrl->setModel("TbAutoInfracaoDevolucaoStatus");
+                $ctrl->setValue("");
+                $ctrl->setLabel("Situação da Devolução:");
+                $ctrl->setAttrib('class', 'form-control');
+                echo $ctrl->render($this);
+                ?>
+            </div>
+
+                    <div class="form-group linha_observacoes hide">
+                        <label for="observacoes" class="control-label">Observações: </label>
+                        <textarea name="observacoes" id="observacoes" rows="6" class="form-control"></textarea>
+                    </div>
+            <?php if ($this->notificacao) { ?>
+                <div class="well linha_notificacao hide">
+                    <?php echo $this->notificacao->render($this); ?>
+                </div>
+            <?php } ?>
+        </form>
+    </div>
+</section>

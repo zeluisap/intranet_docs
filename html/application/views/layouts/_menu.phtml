@@ -1,0 +1,152 @@
+<?php
+$menu = new TbModulo();
+$tb_sistema = new TbSistema();
+$sistema = $tb_sistema->pegaSistema();
+if ($sistema) {
+    $pf = $sistema->findParentRow("TbPessoaJuridica");
+}
+?>
+<aside class='bg-black aside-sm' id='nav'>
+    <section class='vbox'>
+        <header class="dker nav-bar">
+            <a class="btn btn-link visible-xs" data-toggle="class:nav-off-screen" data-target="body">
+                <i class="icon-reorder"></i>
+            </a>
+            <a href="#" class="nav-brand" data-toggle="fullscreen"><?php echo $pf['sigla']; ?></a>
+            <a class="btn btn-link visible-xs" data-toggle="class:show" data-target=".nav-user">
+                <i class="icon-comment-alt"></i>
+            </a>
+        </header>
+        <footer class="footer bg-gradient hidden-xs">
+            <a href="<?php echo $this->url(array("controller" => "auth", "action" => "logout")); ?>" class="btn btn-sm btn-link m-r-n-xs pull-right">
+                <i class="icon-off"></i>                                                                                                                                                                                                                                                                                                                                                                                                                                                
+            </a>
+            <a href="#nav" data-toggle="class:nav-vertical" class="btn btn-sm btn-link m-l-n-sm">
+                <i class="icon-reorder"></i>
+            </a>
+        </footer>
+      <section>
+          <div class="lter nav-user hidden-xs pos-rlt">    
+<?php
+            /*
+             * caixa do usuario
+             *
+             * nesta area as informações referente ao usuario logado são exibidas
+             * nome de usuario, grupos do usuario e ultimo login
+             */
+            /* =============================================================================
+               INFO USUARIO
+               ========================================================================== */
+            $acl = Escola_Acl::getInstance();
+            $usuario = $acl->getUsuarioLogado();
+            if ($usuario) {
+                $txt_nome = $txt_cargo = $txt_setor = $txt_acesso = $txt_foto = $txt_foto_mini = "";
+
+                $pf = $usuario->pega_pessoa_fisica();
+                if ($pf) {
+                    $txt_nome = $pf->nome;
+                    $pessoa = $pf->pega_pessoa();
+                    if ($pessoa) {
+                        if ($pessoa->email) {
+                            $email = $pessoa->email;
+                        }
+                        $foto = $pessoa->getFoto();
+                        if ($foto) {
+                            $txt_foto = $foto->miniatura(array("class" => "img-circle"));
+                            $txt_foto_mini = Escola_Util::url(array("controller" => "arquivo", "action" => "view", "id" => $foto->getId()));
+                        }
+                    }
+                    $tb = new TbFuncionario();
+                    $funcionario = $tb->getPorPessoaFisica($pf);
+                    if ($funcionario) {
+                        $cargo = $funcionario->findParentRow("TbCargo");
+                        if ($cargo) {
+                            $txt_cargo = $cargo->toString();
+                        }
+                        $lotacao = $funcionario->pegaLotacaoAtual();
+                        if ($lotacao) {
+                            $setor = $lotacao->findParentRow("TbSetor");
+                            if ($setor) {
+                                $txt_setor = $setor->toString();
+                            }
+                        }
+                    }
+                }
+                $login = $usuario->ultimoLogin();
+                if ($login) {
+                    $txt_acesso = new Zend_Date($login->data);
+                }
+                $grupos = $usuario->pegaTbGrupo();
+                ?>
+            <div class="nav-avatar pos-rlt">
+              <a href="#" class="thumb-sm avatar animated rollIn" data-toggle="dropdown">
+                <?php if ($txt_foto_mini) { ?>
+                    <img src="<?php echo $txt_foto_mini; ?>" alt="User Image">
+                <?php } ?>
+                <span class="caret caret-white"></span>
+              </a>
+              <ul class="dropdown-menu m-t-sm animated fadeInLeft">
+                <span class="arrow top"></span>
+                <div class="well-sm">
+                    <?php if ($txt_acesso) { ?>
+                    <small class="text-uc text-xs text-muted">Ultimo Acesso:</small>
+                    <p> <?php echo $txt_acesso; ?></p>
+                <?php } ?>
+                <small class="text-uc text-xs text-muted">Grupo(s):</small>
+                <?php foreach ($grupos as $grupo) { ?>
+                    <small class="block text-muted"><i class="icon-circle"></i><?php echo $grupo->descricao;?></small>
+                <?php } ?>
+                </div>
+                <li class="divider"></li>
+                <li>
+                  <a href="<?php echo $this->url(array("controller" => "pessoal", "action" => "index")); ?>">Perfil</a>
+                </li>
+                <li>
+                  <a href="<?php echo $this->url(array("controller" => "auth", "action" => "logout")); ?>">Sair</a>
+                </li>
+              </ul>
+            </div>
+            <?php } ?>
+            <?php
+            $tb = new TbPacote();
+            $pacotes = $tb->buscarPacotes($usuario);
+            $atual = $tb->pegaAtual();
+
+
+            if ($pacotes) {
+                if($atual){
+?>
+            <div class="nav-msg">
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                <b class="badge badge-white count-n"><i class='icon-sitemap'></i></b>
+              </a>
+              <section class="dropdown-menu m-l-sm pull-left animated fadeInRight">
+                <div class="arrow left"></div>
+                <section class="panel bg-white">
+                  <header class="panel-heading">
+                    <strong>Pacotes Disponíveis <span class="count-n"><?php echo count($pacotes);?></span></strong>
+                  </header>
+                  <div class="list-group">
+                    <?php foreach ($pacotes as $pacote) { ?>
+                    <a href="<?php echo $this->url(array("controller" => "auth", "action" => "pacote", "id_pacote" => $pacote->getId())); ?>" class="media list-group-item">
+                      <span class="thumb-sm">
+                        <i class="<?php echo $pacote->icone; ?>"></i>
+                      </span>
+                        <?php echo $pacote->descricao; ?>
+                    </a>
+                    <?php } ?>
+                  </div>
+                  <footer class="panel-footer text-sm">
+                    <a href="#" class="pull-right"><i class="icon-cog"></i></a>
+                    <a href="<?php echo $this->url(array("controller" => "auth", "action" => "pacote")); ?>">Ver Todos</a>
+                  </footer>
+                </section>
+              </section>
+            </div>
+            <?php   }} ?>
+          </div>
+          <?php echo $menu->geraMenu(); ?>
+        </section>
+        
+    </section>
+</aside>

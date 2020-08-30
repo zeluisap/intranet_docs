@@ -1,0 +1,59 @@
+<section class="panel">
+    <header class="panel-heading">
+        Lista Referência de Serviço
+    </header>
+<table class="table table-striped table-condensed">
+                    <thead>
+                        <tr>
+                            <th>Chave</th>
+                            <th>Descrição</th>
+                            <th width="20%" class="text-right">Operações</th>
+                        </tr>
+                    </thead>
+            <?php if ($this->registros && count($this->registros)) { ?>
+                    <tbody>
+            <?php 
+                foreach ($this->registros as $registro) { 
+            ?>
+                        <tr>
+                            <td>
+                                <a href="<?php echo $this->url(array("action" => "view", "id" => $registro->getId())); ?>">
+                                    <?php echo $registro->chave; ?>
+                                </a>
+                            </td>
+                            <td>
+                                <a href="<?php echo $this->url(array("action" => "view", "id" => $registro->getId())); ?>">
+                                    <?php echo $registro->descricao; ?>
+                                </a>
+                            </td>
+                            <td>
+                                <div class="btn-group pull-right"> 
+                                    <a class="btn btn-white" data-toggle="tooltip" data-container="body" title="Visu ali zar"href="<?php echo $this->url(array("controller" => $this->getRequest()->getControllerName(),
+                                                                         "action" => "view",
+                                                                         "id" => $registro->getId())); ?>" class="btn" title="Visualizar">
+                                        <i class="icon-search"></i>
+                                    </a>
+                                    <a class="btn btn-white" data-toggle="tooltip" data-container="body" title="Editar" href="<?php echo $this->url(array("controller" => $this->getRequest()->getControllerName(),
+                                                                         "action" => "editar",
+                                                                         "id" => $registro->getId())); ?>" class="btn" title="Editar">
+                                        <i class="icon-cog"></i>
+                                    </a>
+                                    <a class="btn btn-danger link_excluir" data-toggle="tooltip" data-container="body" title="Excluir" href="<?php echo $this->url(array("controller" => $this->getRequest()->getControllerName(),
+                                                                         "action" => "excluir",
+                                                                         "id" => $registro->getId())); ?>" class="btn link_excluir" title="Excluir">
+                                        <i class="icon-trash"></i>
+                                    </a>
+                                </div>
+                            </td>
+                        </tr>
+            <?php } ?>
+                    </tbody>
+            <?php } ?>
+                </table>
+    <div class="panel-footer">
+        <?php if ($this->registros && count($this->registros)) {
+ echo $this->paginationControl($this->registros, "sliding", "minha_paginacao_control.phtml");
+}
+?>
+    </div>
+</section>

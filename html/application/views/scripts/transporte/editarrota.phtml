@@ -1,0 +1,121 @@
+<form action="<?php echo $this->url(array("controller" => $this->getRequest()->getControllerName(), "action" => "editarrota")); ?>" method="post" id="formulario" class="formulario">
+<section class="panel">
+    <header class="panel-heading">
+        CADASTRO DE ROTA
+    </header>
+    <div class="panel-body">
+
+            <input type="hidden" name="id" id="id" value="<?php echo $this->registro->getId(); ?>" />
+            <input type="hidden" name="id_transporte" id="id_transporte" value="<?php echo $this->transporte->getId(); ?>" />
+
+            <?php if ($this->registro->getId()) { ?>
+            <div class="col-md-4">
+                <div class="form-group">
+                    <label for="codigo">Código:</label>
+                    <input type="text" name="codigo" id="codigo" maxlength="10" value="<?php echo $this->registro->getId(); ?>" class="form-control" disabled/>
+                </div>
+            </div>
+        <?php } ?>
+        <div class="col-md-4">
+            <div class="form-group">
+                <label for="Transporte">Transporte:</label>
+                <input type="text" name="Transporte" id="Transporte" maxlength="10" value="<?php echo $this->transporte->toString(); ?>" class="form-control" disabled/>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <?php
+            $ctrl = new Escola_Form_Element_Select_Table("id_rota_tipo");
+            $ctrl->setPkName("id_rota_tipo");
+            $ctrl->setModel("TbRotaTipo");
+            $ctrl->setValue($this->registro->id_rota_tipo);
+            $ctrl->setLabel("Tipo: ");
+            $ctrl->setAttrib('class', 'form-control');
+            echo $ctrl->render($this);
+            ?>
+        </div>
+        <div class="col-md-4">
+            <?php
+            $ctrl = new Escola_Form_Element_Select_Table("id_linha");
+            $ctrl->setPkName("id_linha");
+            $ctrl->setModel("TbLinha");
+            $ctrl->setValue($this->registro->id_linha);
+            $ctrl->setLabel("Linha de Ônibus: ");
+            $ctrl->setAttrib('class', 'form-control');
+            echo $ctrl->render($this);
+            ?>
+        </div>
+            <div class="col-md-4">
+            <?php
+            $id_tarifa = 0;
+            $to = $this->registro->findParentRow("TbTarifaOcorrencia");
+            if ($to) {
+                $id_tarifa = $to->id_tarifa;
+            }
+            $ctrl = new Escola_Form_Element_Select_Table("id_tarifa");
+            $ctrl->setPkName("id_tarifa");
+            $ctrl->setModel("TbTarifa");
+            $ctrl->setValue($id_tarifa);
+            $ctrl->setLabel("Tarifa:");
+            $ctrl->setAttrib('class', 'form-control');
+            echo $ctrl->render($this);
+            ?>
+            </div>
+            <div class="col-md-4">
+            <div class="form-group">
+                <label for="km">KM:</label>
+                <input type="text" name="km" id="km" value="<?php echo Escola_Util::number_format($this->registro->km); ?>" class="form-control moeda" />
+            </div>
+            </div>
+            <div class="col-md-4">
+            <div class="form-group">
+                <label for="tempo_total">Tempo Total:</label>
+                <input type="text" name="tempo_total" id="tempo_total" maxlength="60" value="<?php echo $this->registro->tempo_total; ?>" class="form-control hora" />
+            </div>
+            </div>
+            <div class="col-md-4">
+            <div class="form-group">
+                <label for="km_velocidade_media">Velocidade Média (Km/h):</label>
+                <input type="text" name="km_velocidade_media" id="km_velocidade_media" value="<?php echo Escola_Util::number_format($this->registro->km_velocidade_media); ?>" class="form-control moeda" />
+            </div>
+            </div>
+    </div>
+
+    </div>
+
+</section>
+    <div class="row">
+        <?php
+        $tb_rd = new TbRotaDia();
+        foreach ($this->dts as $dt) {
+            $veiculos = $viagens = 0;
+            if ($this->registro->getId()) {
+                $rs = $tb_rd->listar(array("id_rota" => $this->registro->getId(), "id_dia_tipo" => $dt->getId()));
+                if ($rs && count($rs)) {
+                    $rd = $rs->current();
+                    $veiculos = $rd->veiculos;
+                    $viagens = $rd->viagens;
+                }
+            }
+            ?>
+
+            <div class="col-md-4">
+                <section class="panel">
+                    <header class="panel-heading">
+                        <?php echo $dt->toString(); ?>
+                    </header>
+                    <div class="panel-body">
+                        <div class="form-group">
+                            <label for="veiculos">Veículos:</label>
+                            <input type="text" name="dia_tipo[<?php echo $dt->getId(); ?>][veiculos]" id="veiculos" size="5" value="<?php echo $veiculos; ?>" class="form-control" />
+                        </div>
+
+                        <div class="form-group">
+                            <label for="viagens">Viagens:</label>
+                            <input type="text" name="dia_tipo[<?php echo $dt->getId(); ?>][viagens]" id="viagens" size="5" value="<?php echo $viagens; ?>" class="form-control " />
+                        </div>
+                    </div>
+                </section>
+            </div>
+        <?php } ?>
+    </div>
+</form>

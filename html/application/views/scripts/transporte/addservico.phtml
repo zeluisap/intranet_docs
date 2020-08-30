@@ -1,0 +1,99 @@
+
+<style type="text/css">
+    .linha_dados {
+        display:none;
+    }
+</style>
+<section class="panel">
+    <header class="panel-heading">
+        ADICIONAR SERVIÇO
+    </header>
+    <div class="panel-body">
+        <form action="<?php echo $this->url(array("controller" => $this->getRequest()->getControllerName(), "action" => $this->getRequest()->getActionName())); ?>" method="post" id="formulario" class="formulario">
+            <input type="hidden" name="id_transporte" id="id_transporte" value="<?php echo $this->transporte->getId(); ?>" />
+            <div class="col-md-4">
+                <div class="form-group">
+                    <label for="Transporte">Transporte:</label>
+                    <input type="text" name="Transporte" id="Transporte" maxlength="10" value="<?php echo $this->transporte->toString(); ?>" class="form-control" disabled/>
+                </div>
+            </div>
+            <?php if ($this->referencia) { ?>
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label for="Referência">Referência:</label>
+                        <input type="text" name="Referência" id="Referência" maxlength="10" value="<?php echo $this->referencia->toString(); ?>" class="form-control" disabled/>
+                    </div>
+                </div>
+            <?php } ?>
+            <div class="col-md-4">
+                <div class="form-group">
+                    <label for="id_servico_transporte_grupo">Serviço:</label>
+                    <select name="id_servico_transporte_grupo" id="id_servico_transporte_grupo" class="form-control">
+                        <option value="">==> SELECIONE <==</option>
+                        <?php foreach ($this->stgs as $stg) { ?>
+                            <option value="<?php echo $stg->getId(); ?>"><?php echo $stg->toString(); ?></option>
+                        <?php } ?>
+                    </select>
+                </div>
+            </div>
+            <div class="col-md-4 linha_dados">
+                <div class="form-group">
+                    <label for="valor">Valor</label>
+                    <div id="valor" class="form-control" disabled=""></div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="form-group">
+                    <label for="ano_referencia" class="control-label">Ano Referência:</label>
+                    <div class="controls">
+                        <input type="text" name="ano_referencia" id="ano_referencia" class="form-control" value="<?php echo date("Y"); ?>" />
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="form-group">
+                    <label for="codigo" class="control-label">Número:</label>
+                    <div class="controls">
+                        <input type="text" name="codigo" id="codigo" class="form-control" value="<?php echo ($this->ss)?$this->ss->codigo:""; ?>" />
+                        * Para Numeração automática, deixe este campo em branco.
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 linha_dados">
+                <div class="form-group">
+                    <label for="data_inicio" class="control-label">Início da Validade:</label>
+                    <div class="controls">
+                        <input type="text" name="data_inicio" id="data_inicio" class="form-control data field" />
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 linha_dados">
+                <div class="form-group">
+                    <label for="data_validade" class="control-label">Validade:</label>
+                    <div class="controls">
+                        <input type="text" name="data_validade" id="data_validade" class="form-control data field" />
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 linha_dados">
+                <div class="form-group">
+                    <label for="data_vencimento" class="control-label">Vencimento do Boleto:</label>
+                    <div class="controls">
+                        <input type="text" name="data_vencimento" id="data_vencimento" class="form-control data field" />
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="form-group">
+                    <label for="mes_referencia">Mês Referência:</label>
+                    <select name="mes_referencia" id="mes_referencia" class="form-control">
+                        <option value="">==> SELECIONE <==</option>
+                        <?php foreach (Escola_Util::pegaMeses() as $mes => $desc_mes) { ?>
+                            <option value="<?php echo $mes; ?>"><?php echo $desc_mes; ?></option>
+                        <?php } ?>
+                    </select>
+                </div>
+            </div>
+        </form>
+    </div>
+</section>

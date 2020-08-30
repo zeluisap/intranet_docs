@@ -1,0 +1,19 @@
+<section class="panel">
+    <header class="panel-heading">
+        Pacote
+    </header>
+    <div class="panel-footer">
+        <dl class="dl-horizontal">
+            <dt>Código:</dt>
+            <dd><?php echo $this->registro->getId(); ?></dd>
+            <dt>Descrição.:</dt>
+            <dd><?php echo $this->registro->sigla; ?></dd>
+            <dt>Controller:</dt>
+            <dd><?php echo $this->registro->descricao; ?></dd>
+            <dt>Ícone:</dt>
+            <dd><?php echo $this->registro->icone; ?></dd>
+            <dt>Status:</dt>
+            <dd><?php echo $this->registro->mostrar_status(); ?></dd>
+        </dl>
+    </div>
+</section>

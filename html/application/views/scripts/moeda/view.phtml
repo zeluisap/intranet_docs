@@ -1,0 +1,27 @@
+<section class="panel">
+    <header class="panel-heading">
+        Visualizar Moeda
+    </header>
+    <div class="panel-body">
+        <dl class="dl-horizontal">
+            <dt>ID:</dt>
+            <dd><?php echo $this->registro->getId(); ?></dd>
+        </dl>
+        <dl class="dl-horizontal">
+            <dt>Símbolo:</dt>
+            <dd><?php echo $this->registro->simbolo; ?></dd>
+        </dl>
+        <dl class="dl-horizontal">
+            <dt>Descrição:</dt>
+            <dd><?php echo $this->registro->descricao; ?></dd>
+        </dl>
+        <dl class="dl-horizontal">
+            <dt>Padrão:</dt>
+            <dd><?php echo $this->registro->mostrar_padrao(); ?></dd>
+        </dl>
+        <dl class="dl-horizontal">
+            <dt>Valor Referência:</dt>
+            <dd><?php echo Escola_Util::number_format($this->registro->valor_ref); ?></dd>
+        </dl>
+    </div>
+</section>

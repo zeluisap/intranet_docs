@@ -1,0 +1,8 @@
+<section class="panel">
+    <header class="panel-heading">CONFIRMAR PAGAMENTO DE AUTO DE INFRAÇÃO</header>
+    <div class="panel-body">
+        <form action="<?php echo $this->url(array("controller" => $this->getRequest()->getControllerName(), "action" => "licencapgto")); ?>" method="post" id="formulario" class="formulario">
+            <?php echo $this->registro->form_pagamento($this); ?>
+        </form>
+    </div>
+</section>

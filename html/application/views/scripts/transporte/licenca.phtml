@@ -1,0 +1,260 @@
+<form action="<?php echo $this->url(array("controller" => $this->getRequest()->getControllerName(), "action" => $this->getRequest()->getActionName())); ?>" method="post" id="formulario" class="formulario">
+    <input type="hidden" name="id_transporte" id="id_transporte" value="<?php echo $this->transporte->getId(); ?>" />
+    <?php if ($this->pessoa) { ?>
+        <input type="hidden" name="id_pessoa" id="id_pessoa" value="<?php echo $this->pessoa->getId(); ?>" />
+    <?php } ?>
+    <section class="panel" id="idPesquisa" style="display: none;">
+        <header class="panel-heading">Opções de Pesquisa</header>
+        <div class="panel-body">
+            <div class="col-md-4">
+                <?php
+                $ctrl = new Escola_Form_Element_Select_Table("filtro_id_servico");
+                $ctrl->setAttrib("class", "filtro");
+                $ctrl->setPkName("id_servico");
+                $ctrl->setModel("TbServico");
+                $ctrl->setValue($this->dados["filtro_id_servico"]);
+                $ctrl->setLabel("Serviço:");
+                $ctrl->setAttrib('class', 'form-control');
+                echo $ctrl->render($this);
+                ?>
+            </div>
+            <div class="col-md-4">
+                <?php
+                $ctrl = new Escola_Form_Element_Select_Table("filtro_id_veiculo_tipo");
+                $ctrl->setAttrib("class", "filtro");
+                $ctrl->setPkName("id_veiculo_tipo");
+                $ctrl->setModel("TbVeiculoTipo");
+                $ctrl->setValue($this->dados["filtro_id_veiculo_tipo"]);
+                $ctrl->setLabel("Tipo Veículo:");
+                $ctrl->setAttrib('class', 'form-control');
+                echo $ctrl->render($this);
+                ?>
+            </div>
+            <div class="col-md-4">
+                <div class="form-group">
+                    <label for="filtro_ano_referencia">Ano Referência:</label>
+                    <input type="text" name="filtro_ano_referencia" id="filtro_ano_referencia" class="form-control filtro" value="<?php echo $this->dados["filtro_ano_referencia"]; ?>" />
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="form-group">
+                    <label for="filtro_mes_referencia">Mês Referência:</label>
+                    <select name="filtro_mes_referencia" id="filtro_mes_referencia" class="filtro form-control">
+                        <option value="" <?php echo (!$this->dados["filtro_mes_referencia"]) ? "selected" : ""; ?>>==> SELECIONE <==</option>
+                        <?php
+                        foreach (Escola_Util::pegaMeses() as $mes => $desc_mes) {
+                            ?>
+                            <option value="<?php echo $mes; ?>" <?php echo ($mes == $this->dados["filtro_mes_referencia"]) ? "selected" : ""; ?>><?php echo $desc_mes; ?></option>
+                        <?php } ?>
+                    </select>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <?php
+                $ctrl = new Escola_Form_Element_Select_Table("filtro_id_servico_solicitacao_status");
+                $ctrl->setAttrib("class", "filtro");
+                $ctrl->setPkName("id_servico_solicitacao_status");
+                $ctrl->setModel("TbServicoSolicitacaoStatus");
+                $ctrl->setValue($this->dados["filtro_id_servico_solicitacao_status"]);
+                $ctrl->setLabel("Status:");
+                $ctrl->setAttrib('class', 'form-control');
+                echo $ctrl->render($this);
+                ?>
+            </div>
+        </div>
+        <div class="panel-footer">
+            <input type="submit" value="Pesquisar" class="acao btn btn-primary" />
+            <input type="button" value="Limpar Filtro" id="idLimparPesquisa" class="btn" />
+        </div>
+    </section>
+</form>
+
+    <section class="panel">
+        <header class="panel-heading">Transporte: <?php echo $this->transporte->toString(); ?> / </header>
+        <form action="<?php echo $this->url(array("controller" => $this->getRequest()->getControllerName(), "action" => "licenca")); ?>" method="post" id="formulario" class="formulario">
+
+                <dl class="dl-horizontal">
+                <?php if ($this->referencia) { ?>
+                    <dl class="dl-horizontal">
+                        <dt>Referência: </dt>
+                        <dd><?php echo $this->referencia->toString(); ?></dd>
+                    </dl>
+                <?php } ?>
+
+            <table class="table table-striped table-bordered">
+                <thead>
+                <tr>
+                    <th><input type="checkbox" name="ck" id="ck" class="ck-marca-todos" rel="lista" /></th>
+                    <th>Referência</th>
+                    <th>Serviço</th>
+                    <th>Número/Ano</th>
+                    <th>Referência</th>
+                    <th>Data Solicitação</th>
+                    <th>Vencimento</th>
+                    <th>Valor</th>
+                    <th>Valor Pago</th>
+                    <th>Início</th>
+                    <th>Validade</th>
+
+                    <th width="20%" class="text-right">Operações</th>
+                </tr>
+                </thead>
+                <?php if ($this->registros && count($this->registros)) { ?>
+                    <tbody>
+                    <?php
+                    foreach ($this->registros as $registro) {
+                        $stg = $registro->findParentRow("TbServicoTransporteGrupo");
+                        $tg = $stg->findParentRow("TbTransporteGrupo");
+                        $s = $stg->findParentRow("TbServico");
+                        $ssp = $registro->pegaPagamento();
+                        $ref = $registro->pegaReferencia();
+                        ?>
+                        <tr>
+                            <td>
+                                <?php if ($registro->aguardando_pagamento()) { ?>
+                                    <input type="checkbox" name="lista[]" id="lista" class="lista" value="<?php echo $registro->getId(); ?>" />
+                                <?php } ?>
+                            </td>
+                            <td>
+                                <a href="<?php echo $this->url(array("action" => "viewlicenca", "id_transporte" => $this->transporte->getId(), "id" => $registro->getId())); ?>">
+                                    <?php echo $ref->toString(); ?>
+                                </a>
+                            </td>
+                            <td>
+                                <a href="<?php echo $this->url(array("action" => "viewlicenca", "id_transporte" => $this->transporte->getId(), "id" => $registro->getId())); ?>">
+                                    <?php echo $s->toString(); ?>
+                                </a>
+                            </td>
+                            <td>
+                                <a href="<?php echo $this->url(array("action" => "viewlicenca", "id_transporte" => $this->transporte->getId(), "id" => $registro->getId())); ?>">
+                                    <?php echo $registro->mostrar_numero(); ?>
+                                </a>
+                            </td>
+                            <td>
+                                <a href="<?php echo $this->url(array("action" => "viewlicenca", "id_transporte" => $this->transporte->getId(), "id" => $registro->getId())); ?>">
+                                    <?php echo $registro->mostrar_referencia(); ?>
+                                </a>
+                            </td>
+                            <td>
+                                <a href="<?php echo $this->url(array("action" => "viewlicenca", "id_transporte" => $this->transporte->getId(), "id" => $registro->getId())); ?>">
+                                    <?php echo Escola_Util::formatData($registro->data_solicitacao); ?>
+                                </a>
+                            </td>
+                            <td>
+                                <a href="<?php echo $this->url(array("action" => "viewlicenca", "id_transporte" => $this->transporte->getId(), "id" => $registro->getId())); ?>">
+                                    <?php echo Escola_Util::formatData($registro->data_vencimento); ?>
+                                </a>
+                            </td>
+                            <td>
+                                <a href="<?php echo $this->url(array("action" => "viewlicenca", "id_transporte" => $this->transporte->getId(), "id" => $registro->getId())); ?>">
+                                    <?php echo $registro->pega_valor()->toString(); ?>
+                                </a>
+                            </td>
+                            <td>
+                                <a href="<?php echo $this->url(array("action" => "viewlicenca", "id_transporte" => $this->transporte->getId(), "id" => $registro->getId())); ?>">
+                                    <?php echo ($ssp) ? $ssp->pega_valor_pago()->toString() : "--"; ?>
+                                </a>
+                            </td>
+                            <td>
+                                <a href="<?php echo $this->url(array("action" => "viewlicenca", "id_transporte" => $this->transporte->getId(), "id" => $registro->getId())); ?>">
+                                    <?php echo Escola_Util::formatData($registro->data_inicio); ?>
+                                </a>
+                            </td>
+                            <td>
+                                <a href="<?php echo $this->url(array("action" => "viewlicenca", "id_transporte" => $this->transporte->getId(), "id" => $registro->getId())); ?>">
+                                    <?php echo Escola_Util::formatData($registro->data_validade); ?>
+                                </a>
+                            </td>
+                            <td>
+                                <div class="btn-group pull-right">
+                                    <div class="btn-group">
+                                        <button class="btn btn-white dropdown-toggle" data-toggle="dropdown"><i class="icon-list"></i> <span class="caret"></span></button>
+                                        <ul class="dropdown-menu">
+                                            <li>
+                                                <a target="_blank" title="Cancelar Solicitação" href="<?php
+                                                echo $this->url(array("controller" => $this->getRequest()->getControllerName(),
+                                                    "action" => "licencacancelar",
+                                                    "id_transporte" => $this->transporte->getId(), "id" => $registro->getId()));
+                                                ?>" class="link_confirma">
+
+                                                    <i class="icon-minus-sign"></i>
+                                                    Cancelar Solicitação
+                                                </a>
+                                            </li>
+                                            <li>
+                                                <?php if ($registro->pago()) { ?>
+                                                    <a href="<?php
+                                                    echo $this->url(array("controller" => $this->getRequest()->getControllerName(),
+                                                        "action" => "cancelarpagamento",
+                                                        "id_transporte" => $this->transporte->getId(), "id" => $registro->getId()));
+                                                    ?>" class="link_confirma" title="Cancelar Pagamento">
+
+                                                        <i class="icon-remove-circle"></i>
+                                                        Cancelar Pagamento
+                                                    </a>
+                                                    <?php // if ($registro->valido()) { ?>
+                                                    <a href="<?php
+                                                    echo $this->url(array("controller" => $this->getRequest()->getControllerName(),
+                                                        "action" => "emitir",
+                                                        "id_transporte" => $this->transporte->getId(), "id" => $registro->getId()));
+                                                    ?>" title="Emitir Documento">
+                                                        <i class="icon-print"></i>
+                                                        Emitir Documento
+                                                    </a>
+                                                    <?php // }  ?>
+                                                <?php } else { ?>
+                                                    <?php // if ($registro->cancelado() || $registro->aguardando_pagamento()) { ?>
+                                                    <?php //}  ?>
+                                                    <?php if ($registro->aguardando_pagamento()) { ?>
+                                                        <a target="_blank" href="<?php
+                                                        echo $this->url(array("controller" => $this->getRequest()->getControllerName(),
+                                                            "action" => "boleto",
+                                                            "id_transporte" => $this->transporte->getId(), "id" => $registro->getId()));
+                                                        ?>" title="Gerar Boleto">
+                                                            <i class="icon-credit-card"></i>
+                                                            Gerar Boleto
+                                                        </a>
+                                                        <a href="<?php
+                                                        echo $this->url(array("controller" => $this->getRequest()->getControllerName(),
+                                                            "action" => "licencapgto",
+                                                            "id_transporte" => $this->transporte->getId(), "id" => $registro->getId()));
+                                                        ?>" title="Confirmar Pagamento">
+                                                            <i class="icon-money"></i>
+                                                            Confirmar Pagamento
+                                                        </a>
+                                                    <?php } ?>
+                                                <?php } ?>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                    <a href="<?php
+                                    echo $this->url(array("controller" => $this->getRequest()->getControllerName(),
+                                        "action" => "viewlicenca",
+                                        "id_transporte" => $this->transporte->getId(), "id" => $registro->getId()));
+                                    ?>" class="btn btn-white" title="Visualizar">
+                                        <i class="icon-search"></i>
+                                    </a>
+                                    <a href="<?php
+                                    echo $this->url(array("controller" => $this->getRequest()->getControllerName(),
+                                        "action" => "licencaeditar",
+                                        "id_transporte" => $this->transporte->getId(), "id" => $registro->getId()));
+                                    ?>"  class="btn btn-white"  title="Editar">
+                                        <i class="icon-cog"></i>
+                                    </a>
+
+                                </div>
+                            </td>
+                        </tr>
+                    <?php } ?>
+                    </tbody>
+                <?php } ?>
+            </table>
+        <div class="panel-footer">
+            <?php
+            if ($this->registros && count($this->registros)) {
+                echo $this->paginationControl($this->registros, "sliding", "minha_paginacao_control.phtml");
+            }
+            ?>
+        </div>
+        </form>
+    </section>

@@ -1,0 +1,16 @@
+<?php 
+if (count($this->botao->getItens())) { 
+    $icon = "icon-list-alt";
+    if ($this->botao->getIcon()) {
+        $icon = $this->botao->getIcon();
+    }
+?>
+<header class="bg-black dker header clearfix">
+    <p>
+        <i class="<?php echo $icon; ?>"></i> 
+        <?php echo $this->botao->getTitulo(); ?>
+    </p>
+    <?php echo $this->botao->render(); ?>
+</header>
+
+<?php } ?>

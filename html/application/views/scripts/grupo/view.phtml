@@ -1,0 +1,20 @@
+<section class="panel">
+    <header class="panel-heading">Visualizar Grupo</header>
+    <div class="panel-body">
+        <dl class="dl-horizontal">
+            <dt>Código:</dt>
+            <dd><?php echo $this->grupo->getId(); ?></dd>
+            <dt>Descrição:</dt>
+            <dd><?php echo $this->grupo->descricao; ?></dd>
+            <dt>Padrão:</dt>
+            <dd><?php echo $this->grupo->mostrarPadrao(); ?></dd>
+            <?php
+            $rg = $this->grupo->findParentRow("TbGrupo");
+            if (count($rg)) {
+                ?>
+                <dt>Grupo Inferior:</dt>
+                <dd><?php echo $rg->descricao; ?></dd>
+            <?php } ?>
+        </dl>
+    </div>
+</section>

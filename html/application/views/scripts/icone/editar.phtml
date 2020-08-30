@@ -1,0 +1,37 @@
+<section class="panel">
+    <header class="panel-heading">
+        CADASTRO DE ÍCONE
+    </header>
+    <div class="panel-body">
+        <form action="<?php echo $this->url(array("controller" => $this->getRequest()->getControllerName(), "action" => "editar")); ?>" method="post" id="formulario" class="formulario">
+            <input type="hidden" name="id" id="id" value="<?php echo $this->registro->getId(); ?>" />
+            <?php if ($this->registro->getId()) { ?>
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label for="codigo">Código:</label>
+                        <input type="text" name="codigo" id="codigo" maxlength="10" value="<?php echo $this->registro->getId(); ?>" class="form-control" disabled/>
+                    </div>
+                </div>
+            <?php } ?>
+            <div class="col-md-4">
+                <?php
+                $ctrl = new Escola_Form_Element_Select_Table("id_icone_tipo");
+                $ctrl->setPkName("id_icone_tipo");
+                $ctrl->setModel("TbIconeTipo");
+                $ctrl->setValue($this->registro->id_icone_tipo);
+                $ctrl->setLabel("Tipo: ");
+                $ctrl->setAttrib('class', 'form-control');
+                echo $ctrl->render($this);
+                ?>
+            </div>
+            <div class="col-md-4">
+                <?php
+                $ctrl = new Escola_Form_Element_Icone("descricao");
+                $ctrl->setValue($this->registro->descricao);
+                $ctrl->setAttrib('class', 'form-control');
+                echo $ctrl->render($this);
+                ?>
+            </div>
+        </form>
+    </div>
+</section>

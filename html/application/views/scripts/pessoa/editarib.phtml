@@ -1,0 +1,70 @@
+<section class="panel">
+    <header class="panel-heading">CADASTRO DE PESSOA > INFORMAÇÃO BANCÁRIA</header>
+    <div class="panel-body">
+        <form action="<?php echo $this->url(array("controller" => $this->getRequest()->getControllerName(), "action" => $this->getRequest()->getActionName())); ?>" method="post" id="formulario" class="formulario">
+            <?php if ($this->registro) { ?>
+                <input type="hidden" name="id" id="id" value="<?php echo $this->registro->getId(); ?>" />
+            <?php } ?>
+            <?php if ($this->ib->getId()) { ?>
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label for="codigo">Código:</label>
+                        <input type="text" name="codigo" id="codigo" maxlength="10" value="<?php echo $this->registro->getId(); ?>" class="form-control" disabled/>
+                    </div>
+                </div>
+            <?php } ?>
+            <div class="col-md-4">
+                <div class="form-group">
+                    <label for="codigo">Pessoa:</label>
+                    <input type="text" name="Pessoa" id="Pessoa" maxlength="10" value="<?php echo $this->pessoa->toString(); ?>" class="form-control" disabled/>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <?php
+                $ctrl = new Escola_Form_Element_Select_Table("id_info_bancaria_tipo");
+                $ctrl->setPkName("id_info_bancaria_tipo");
+                $ctrl->setModel("TbInfoBancariaTipo");
+                $ctrl->setValue($this->ib->id_info_bancaria_tipo);
+                $ctrl->setLabel("Tipo: ");
+                $ctrl->setAttrib('class', 'form-control');
+                echo $ctrl->render($this);
+                ?>
+            </div>
+            <div class="col-md-4">
+                <?php
+                $ctrl = new Escola_Form_Element_Select_Table("id_banco");
+                $ctrl->setPkName("id_banco");
+                $ctrl->setModel("TbBanco");
+                $ctrl->setValue($this->ib->id_banco);
+                $ctrl->setLabel("Banco: ");
+                $ctrl->setAttrib('class', 'form-control');
+                echo $ctrl->render($this);
+                ?>
+            </div>
+            <div class="col-md-4">
+                <div class="form-group row">
+                    <div class="col-md-8">
+                    <label for="agencia">Agência:</label>
+                    <input type="text" name="agencia" id="agencia" class="form-control" value="<?php echo $this->ib->agencia; ?>" />
+                    </div>
+                    <div class="col-md-4">
+                    <label for="agencia_dv">&nbsp;</label>
+                    <input type="text" name="agencia_dv" id="agencia_dv" class="form-control" value="<?php echo $this->ib->agencia_dv; ?>" />
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="form-group row">
+                    <div class="col-md-8">
+                    <label for="conta">Conta:</label>
+                    <input type="text" name="conta" id="conta" class="form-control" value="<?php echo $this->ib->conta; ?>" />
+                    </div>
+                    <div class="col-md-4">
+                    <label for="conta_dv">&nbsp;</label>
+                    <input type="text" name="conta_dv" id="conta_dv" class="form-control" value="<?php echo $this->ib->conta_dv; ?>" />
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</section>

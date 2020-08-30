@@ -1,0 +1,10 @@
+<section class="panel">
+    <header class="panel-heading">
+        APLICAR DESCONTO NOTIFICAÇÃO DE AUTO DE INFRAÇÃO
+    </header>
+    <form action="<?php echo $this->url(array("controller" => $this->getRequest()->getControllerName(), "action" => $this->getRequest()->getActionName())); ?>" method="post" id="formulario" class="formulario">
+    <div class="panel-body">
+        <?php echo $this->registro->form_desconto($this); ?>
+    </div>
+    </form>
+</section>

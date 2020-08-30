@@ -1,0 +1,98 @@
+<?php echo $this->doctype(); ?>
+<html lang="en-US">
+<head>
+    <?php echo $this->headMeta(); ?>
+    <?php echo $this->headTitle(); ?>
+    <?php echo $this->headLink(); ?>
+    <?php echo $this->headStyle(); ?>
+    <?php echo $this->headScript(); ?>
+</head>
+<body>
+<section class="hbox stretch">
+    <?php
+    $content = '';
+    $usuario = TbUsuario::pegaLogado();
+    /*================================================
+        header (navegacao, menu)
+    =================================================*/
+    $wrapper = '';
+    if ($this->auth && $this->auth->hasIdentity()) {
+        echo $this->partial("_navegacao.phtml", array("modulo" => $this->modulo,"acao" => $this->acao));
+        $tb = new TbPacote();
+        $wrapper = 'wrapper';
+        $pacote = $tb->pegaAtual();
+        if ($pacote) { echo $this->partial("_menu.phtml"); }
+    }
+    ?>
+    <section id="content">
+        <section class="vbox">
+            <?php 
+            if($this->layout()->button){
+                echo $this->layout()->button;
+            }else{
+                echo  $this->partial("_header.phtml");
+            }
+            
+            ?>
+            <section class="scrollable <?= $wrapper?>">
+                    <?php
+                    /*================================================
+                        Mensagem de erro
+                    =================================================*/
+                    if ($this->actionErrors) {
+                        foreach ($this->actionErrors as $erro) { ?>
+                            <script>
+                                $(document).ready(function(){
+                                    $.notify({
+                                        // options
+                                        message: '<?php echo $erro; ?>',
+                                        icon: 'icon-ban-circle'
+                                    },{
+                                        // settings
+                                        type: 'danger',
+                                        offset: {
+                                            x: 20,
+                                            y: 45
+                                        },
+                                        spacing: 10,
+                                        delay: 5000,
+                                    });
+                                });
+                            </script>
+                        <?php } }
+                    /*================================================
+                        Mensagem de sucesso
+                    =================================================*/
+                    if ($this->actionMessages) {
+                        foreach ($this->actionMessages as $message) { ?>
+                            <script>
+                                $(document).ready(function(){
+                                    $.notify({
+                                        // options
+                                        message: '<?php echo $message; ?>',
+                                        icon: 'icon-ok'
+                                    },{
+                                        // settings
+                                        type: 'success',
+                                        offset: {
+                                            x: 20,
+                                            y: 45
+                                        },
+                                        spacing: 10,
+                                        delay: 5000,
+                                    });
+                                });
+                            </script>
+                        <?php }}
+                    /*================================================
+                        conteudo do sistema
+                    =================================================*/
+                    ?>
+                    <?php echo $this->layout()->content; ?>
+                    <?php echo $this->partial("_footer.phtml"); ?>
+            </section>
+        </section>
+    </section>
+</section>
+</body>
+</html>

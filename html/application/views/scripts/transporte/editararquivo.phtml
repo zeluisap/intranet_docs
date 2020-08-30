@@ -1,0 +1,132 @@
+<section class="panel">
+    <header class="panel-heading">ARQUIVO DE TRANSPORTE</header>
+    <div class="panel-body">
+        <form action="<?php echo $this->url(array("controller" => $this->getRequest()->getControllerName(), "action" => "editararquivo")); ?>" method="post" id="formulario" class="formulario" enctype="multipart/form-data">
+            <input type="hidden" name="jan_pagina" id="jan_pagina" value="" />
+            <input type="hidden" name="operacao" id="operacao" value="<?php echo $this->operacao; ?>" />
+            <input type="hidden" name="id" id="id" value="<?php echo $this->transporte->getId(); ?>" />
+            <?php if ($this->registro->getId()) { ?>
+                <input type="hidden" name="id_documento_ref" id="id_documento_ref" value="<?php echo $this->registro->getId(); ?>" />
+            <?php } ?>
+            <dl class="dl-horizontal">
+                <dt>Transporte:</dt>
+                <dd><?php echo $this->transporte->toString(); ?></dd>
+            </dl>
+            <?php
+            $tb = new TbDocumentoTipoTarget();
+            $dtts = $tb->listar();
+            if ($dtts) {
+                $id_dtt = 0;
+                if (isset($this->dados["id_documento_tipo_target"]) && $this->dados["id_documento_tipo_target"]) {
+                    $id_dtt = $this->dados["id_documento_tipo_target"];
+                }
+                ?>
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label for="id_documento_tipo_target">Tipo:</label>
+                        <select name="id_documento_tipo_target" id="id_documento_tipo_target" class="form-control">
+                            <option value="" <?php echo (!$id_dtt)?"selected":""; ?>>==> SELECIONE <==</option>
+                            <?php foreach ($dtts as $dtt) { ?>
+                                <?php if (!$dtt->normal()) { ?>
+                                    <option value="<?php echo $dtt->getId(); ?>" <?php echo ($dtt->getId() == $id_dtt)?"selected":""; ?>><?php echo $dtt->toString(); ?></option>
+                                <?php } ?>
+                            <?php } ?>
+                        </select>
+                    </div>
+                </div>
+            <?php } ?>
+            <div class="col-md-4 linha_documento_tipo" style="display:none">
+                <div class="form-group" >
+                    <label for="id_documento_tipo">Tipo de Documento:</label>
+                    <select name="id_documento_tipo" id="id_documento_tipo" class="form-control"></select>
+                </div>
+            </div>
+
+            <div id="janela_documento" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                            <h4 class="modal-title" id="myModalLabel">Localizar Documento</h4>
+                        </div>
+                        <div class="modal-body">
+                            <div class="well well-small">
+                                <fieldset>
+                                    <div class="form-group">
+                                        <label for="filtro_numero">Número / Ano:</label>
+                                        <input type="text" name="filtro_numero" id="filtro_numero" value="" class="filtro span1" /> / <input type="text" name="filtro_ano" id="filtro_ano" value="" class="filtro span1" />
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="filtro_resumo">Resumo:</label>
+                                        <textarea name="filtro_resumo" id="filtro_resumo" rows="5" class="filtro span5"></textarea>
+                                    </div>
+                                </fieldset>
+                            </div>
+                            <table id="documento_resposta" class="table table-striped table-bordered">
+                                <thead class="head_documento">
+                                <th>ID</th>
+                                <th>Data / Hora Criação</th>
+                                <th>Tipo</th>
+                                <th>Número</th>
+                                <th>Resumo</th>
+                                </thead>
+                                <tbody class="corpo_documento"></tbody>
+                            </table>
+                        </div>
+                        <div class="modal-footer">
+                            <button class="btn" data-dismiss="modal" aria-hidden="true">Fechar</button>
+                            <input type="button" value="ADICIONAR" class="btn" id="bt_documento_novo" />
+                            <input type="button" value="LIMPAR FILTRO" id="bt_documento_limpar" class="btn" />
+                            <input type="submit" value="PROCURAR" class="btn btn-primary" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <input type="hidden" name="id_documento" id="id_documento" value="<?php echo ($this->documento)?$this->documento->getId():""; ?>" />
+
+            <div class="col-md-4 linha_documento" style="display:none">
+                <label for="procedencia">Documento:</label>
+                <div class="input-group" >
+                    <input type="text" name="show_documento" id="show_documento" value="<?php echo ($this->documento && $this->documento->getId())?$this->documento->toString():""; ?>" disabled class="form-control" />
+                    <span class="input-group-btn">
+                        <a href="#" id="link_documento" title="Selecionar Documento" class="btn btn-white">
+                            <i class="icon-search"></i>
+                        </a>
+                    </span>
+                    <div class="clear"></div>
+                </div>
+            </div>
+            <div class="col-md-4 linha_documento_cadastro" style="display:none">
+                <div class="form-group" >
+                    <div class="col-md-8">
+                    <label for="numero">Número:</label>
+                    <input type="text" name="numero" id="numero" class="field form-control" />
+                    </div>
+                    <div class="col-md-4">
+                    <label for="ano">&nbsp;</label>
+                    <input type="text" name="ano" id="ano" class="field form-control" />
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 linha_cadastro">
+                <div class="form-group">
+                    <label for="resumo">Observações:</label>
+                    <textarea name="resumo" id="resumo" rows="4" class="field form-control"><?php echo ($this->documento)?$this->documento->resumo:""; ?></textarea>
+                </div>
+            </div>
+            <div class="col-md-4 linha_cadastro">
+                <div class=" form-group">
+                    <label for="localizacao_fisica">Localização Física:</label>
+                    <textarea name="localizacao_fisica" id="localizacao_fisica" rows="4" class="field form-control"><?php echo ($this->documento)?$this->documento->localizacao_fisica:""; ?></textarea>
+                </div>
+            </div>
+            <div class="col-md-4 linha_cadastro">
+                <div class=" form-group">
+                    <label for="arquivo">Arquivo:</label>
+                    <input type="file" name="arquivo" id="arquivo" size="50"  />
+                </div>
+            </div>
+        </form>
+    </div>
+</section>

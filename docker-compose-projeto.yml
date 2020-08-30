@@ -1,0 +1,36 @@
+version: "3"
+services:
+  intranet_projeto_db:
+    image: mariadb
+    container_name: intranet_projeto_db
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: s0laris
+    volumes:
+      - "./volumes/mysql/intranet_projeto:/var/lib/mysql"
+      - "./intranet_projeto.sql:/docker-entrypoint-initdb.d/intranet_projeto.sql"
+
+  intranet_sttrans_db_log:
+    image: mariadb
+    container_name: intranet_sttrans_db_log
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: s0laris
+    volumes:
+      - "./volumes/mysql/intranet_db:/var/lib/mysql"
+      - "./intranet_sttrans_log.sql:/docker-entrypoint-initdb.d/intranet_sttrans_log.sql"
+
+  intranet_sttrans_site:
+    build:
+      context: .
+      dockerfile: intranet.dockerfile
+    image: intranet_sttrans_site
+    container_name: intranet_sttrans_site
+    restart: always
+    ports:
+      - 8087:80
+    volumes:
+      - ./html:/var/www/html
+    depends_on:
+      - intranet_projeto_db
+      - intranet_sttrans_db_log

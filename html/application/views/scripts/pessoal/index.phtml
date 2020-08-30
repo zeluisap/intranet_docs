@@ -1,0 +1,127 @@
+<form action="<?php echo $this->url(array("controller" => $this->getRequest()->getControllerName(), "action" => "index")); ?>" method="post" id="formulario" class="formulario" enctype="multipart/form-data">
+<section class="panel">
+    <div class="wizard clearfix">
+        <ul class="steps">
+            <li data-target="#step1" class="active"><i class="icon-user icon-large"></i> Dados Pessoais</li>
+            <li data-target="#step2"><i class="icon-home icon-large"></i> Endereço</li>
+        </ul>
+        <div class="actions">
+            <button type="button" class="btn btn-white btn-xs btn-prev" disabled="disabled">Anterior</button>
+            <button type="button" class="btn btn-white btn-xs btn-next" data-last="Fim">Próximo</button>
+        </div>
+    </div>
+    <div class="step-content">
+        <div class="step-pane active" id="step1">
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label for="cpf">CPF:</label>
+                        <input type="text" name="cpf" id="cpf" value="<?php echo $this->formatCpf($this->pf->cpf); ?>" class="form-control" disabled/>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label for="cpf">CPF:</label>
+                        <input type="text" name="cpf" id="cpf" value="<?php echo $this->formatCpf($this->pf->cpf); ?>" class="form-control" disabled/>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label for="Nome">Nome:</label>
+                        <input type="text" name="nome" id="nome" value="<?php echo $this->pf->nome; ?>" class="form-control" />
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label for="email">E-Mail:</label>
+                        <input type="text" name="email" id="email" value="<?php echo $this->pf->pega_pessoa()->email; ?>" class="form-control" />
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label for="data_nascimento">Data de Nascimento:</label>
+                        <input type="text" name="data_nascimento" id="data_nascimento" value="<?php echo $this->pf->mostrarDataNascimento(); ?>" class="data form-control" />
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <?php
+                    $ctrl = new Escola_Form_Element_Select_Table_Crud_Estadocivil("id_estado_civil");
+                    $ctrl->setPkName("id_estado_civil");
+                    $ctrl->setModel("TbEstadoCivil");
+                    $ctrl->setValue($this->pf->id_estado_civil);
+                    $ctrl->setLabel("Estado Civil: ");
+                    $ctrl->setAttrib('class', 'form-control');
+                    echo $ctrl->render($this);
+                    ?>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label for="identidade_numero">Identidade - Número:</label>
+                        <input type="text" name="identidade_numero" id="identidade_numero" value="<?php echo $this->pf->identidade_numero; ?>" class="form-control" />
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label for="identidade_orgao_expedidor">Identidade - Órgão Expedidor:</label>
+                        <input type="text" name="identidade_orgao_expedidor" id="identidade_orgao_expedidor" value="<?php echo $this->pf->identidade_orgao_expedidor; ?>" class="form-control" />
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <?php
+                    $ctrl = new Escola_Form_Element_Select_Table("identidade_id_uf");
+                    $ctrl->setPkName("id_uf");
+                    $ctrl->setModel("TbUf");
+                    $ctrl->setValue($this->pf->identidade_id_uf);
+                    $ctrl->setLabel("Identidade - UF: ");
+                    $ctrl->setAttrib('class', 'form-control');
+                    echo $ctrl->render($this);
+                    ?>
+                </div>
+                <div class="col-md-4">
+                    <?php
+                    $telefone = "";
+                    $pessoa = $this->pf->pega_pessoa();
+                    $telefones = $pessoa->getTelefones("F");
+                    if ($telefones) {
+                        $telefone = $telefones[0]->ddd . $telefones[0]->numero;
+                    }
+                    ?>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label for="telefone">Telefone:</label>
+                        <input type="text" name="telefone" id="telefone" size="20" value="<?php echo $telefone; ?>" class="telefone form-control" />
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <?php
+                    $celular = "";
+                    $pessoa = $this->pf->pega_pessoa();
+                    $telefones = $pessoa->getTelefones("C");
+                    if ($telefones) {
+                        $celular = $telefones[0]->ddd . $telefones[0]->numero;
+                    }
+                    ?>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label for="celular">Celular:</label>
+                        <input type="text" name="celular" id="celular" size="20" value="<?php echo $celular; ?>" class="telefone form-control" />
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label for="arquivo_foto">Foto (somente JPEG ou PNG):</label>
+                        <input type="file" name="arquivo_foto" id="arquivo_foto" class="form-control" />
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="step-pane" id="step2">
+            <div class="row">
+                <?php echo $this->pf->pega_pessoa()->getEndereco()->render($this);  ?>
+            </div>
+        </div>
+    </div>
+</section>
+</form>

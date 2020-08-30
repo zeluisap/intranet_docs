@@ -1,0 +1,29 @@
+<section class="panel">
+    <header class="panel-heading">CADASTRO DE TIPO DE VÍNCULO</header>
+    <div class="panel-body">
+        <form action="<?php echo $this->url(array("controller" => $this->getRequest()->getControllerName(), "action" => "editar")); ?>" method="post" id="formulario" class="formulario">
+            <input type="hidden" name="id" id="id" value="<?php echo $this->registro->getId(); ?>" />
+            <?php if ($this->registro->getId()) { ?>
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label for="codigo">Código:</label>
+                        <input type="text" name="codigo" id="codigo" maxlength="60" value="<?php echo $this->registro->getId(); ?>" class="form-control" disabled/>
+                    </div>
+                </div>
+            <?php } ?>
+            <div class="col-md-4">
+                <div class="form-group">
+                    <label for="chave">Chave:</label>
+                    <input type="text" name="chave" id="chave" maxlength="10" value="<?php echo $this->registro->chave; ?>" class="form-control" />
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="form-group">
+                    <label for="descricao">Descrição:</label>
+                    <input type="text" name="descricao" id="descricao" maxlength="60" value="<?php echo $this->registro->descricao; ?>" class="form-control" />
+                </div>
+            </div>
+
+        </form>
+    </div>
+</section>

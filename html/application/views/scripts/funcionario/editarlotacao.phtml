@@ -1,0 +1,90 @@
+<section class="panel">
+    <header class="panel-heading">CADASTRO DE LOTAÇÃO</header>
+    <div class="panel-body">
+        <form action="<?php echo $this->url(array("controller" => $this->getRequest()->getControllerName(), "action" => "editarlotacao")); ?>" method="post" id="formulario" class="formulario">
+            <?php if ($this->funcionario && $this->funcionario->getId()) { ?>
+                <input type="hidden" name="id_funcionario" id="id_funcionario" value="<?php echo $this->funcionario->getId(); ?>" />
+            <?php } ?>
+            <?php if ($this->registro->getId()) { ?>
+                <input type="hidden" name="id_lotacao" id="id_lotacao" value="<?php echo $this->registro->getId(); ?>" />
+            <?php } ?>
+
+
+                <?php if ($this->registro->getId()) { ?>
+                    <div class="col-md-2">
+                        <div class="form-group">
+                            <label for="">Código:</label>
+                            <input type="text" value="<?php echo $this->registro->getId(); ?>" class="form-control" disabled/>
+                        </div>
+                    </div>
+
+                    <?php
+                    $lt = $this->registro->findParentRow("TbLotacaoTipo");
+                    if ($lt) { ?>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label for="">Tipo:</label>
+                                <input type="text" value="<?php echo $lt->toString(); ?>" class="form-control" disabled/>
+                            </div>
+                        </div>
+                        <?php
+                    }
+                }
+                ?>
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label for="">Funcionário:</label>
+                    <input type="text" name="funcionario" value="<?php echo $this->funcionario->toString(); ?>" class="form-control" disabled/>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <?php
+                $ctrl = new Escola_Form_Element_Select_Table("id_setor");
+                $ctrl->setPkName("id_setor");
+                $ctrl->setModel("TbSetor");
+                $ctrl->setValue($this->registro->id_setor);
+                $ctrl->setLabel("Setor: ");
+                $ctrl->setAttrib('class', 'form-control');
+                echo $ctrl->render($this);
+                ?>
+            </div>
+            <?php
+                $tb = new TbFuncionarioFuncao();
+                if (count($tb->fetchAll())) {
+            ?>
+            <div class="col-md-4">
+            <?php
+                    $ctrl = new Escola_Form_Element_Select_Table("id_funcionario_funcao");
+                    $ctrl->setPkName("id_funcionario_funcao");
+                    $ctrl->setModel("TbFuncionarioFuncao");
+                    $ctrl->setValue($this->registro->id_funcionario_funcao);
+                    $ctrl->setLabel("Função: ");
+                    $ctrl->setAttrib('class', 'form-control');
+                    echo $ctrl->render($this);
+            ?>
+            </div>
+            <?php } ?>
+            <div class="col-md-4">
+                <div class="form-group">
+                    <label for="data_inicial">Data Inicial:</label>
+                    <input type="text" name="data_inicial" id="data_inicial" value="<?php echo $this->formatData($this->registro->data_inicial); ?>" class="data form-control" />
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="form-group">
+                    <label for="data_final">Data Final:</label>
+                    <input type="text" name="data_final" id="data_final" value="<?php echo $this->formatData($this->registro->data_final); ?>" class="data form-control" />
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="form-group">
+                    <label for="chefe">Chefe:</label>
+                    <select name="chefe" id="chefe" class="form-control">
+                        <option value="S" <?php echo ($this->registro->chefe())?"selected":""; ?>>SIM</option>
+                        <option value="N" <?php echo (!$this->registro->chefe())?"selected":""; ?>>NÃO</option>
+                    </select>
+                </div>
+            </div>
+        </form>
+    </div>
+</section>

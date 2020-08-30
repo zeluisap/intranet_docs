@@ -1,0 +1,18 @@
+-- atualizando banco
+docker exec -ti intranet_sttrans_db bash -c "mysql -u root -ps0laris < /tmp/intranet_sttrans_20190918.sql";
+
+-- atualizar o encoding do banco para utf-8
+docker exec -ti intranet_sttrans_site bash -c "cd /var/www/html/application && php proc.php -c encoding"
+
+-- migração e exclusão de transportes
+docker exec -ti intranet_sttrans_site bash -c "cd /var/www/html/application && php proc.php -c migracao"
+
+-- para dividir o grupo de carga
+docker exec -ti intranet_sttrans_site bash -c "cd /var/www/html/application && php proc.php -c dividir_carga"
+docker exec -ti intranet_sttrans_site bash -c "cd /var/www/html/application && php proc.php -c dividir_carga -p migrar_motoristas"
+
+-- remove somente CARGA
+docker exec -ti intranet_sttrans_site bash -c "cd /var/www/html/application && php proc.php -c remover_transporte --id 8"
+
+-- remove transportes desnecessários .. incluindo CARGA
+docker exec -ti intranet_sttrans_site bash -c "cd /var/www/html/application && php proc.php -c remover_transporte"

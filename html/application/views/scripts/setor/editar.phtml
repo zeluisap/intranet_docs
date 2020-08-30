@@ -1,0 +1,108 @@
+<section class="panel">
+    <header class="panel-heading">
+        CADASTRO DE SETOR
+    </header>
+    <form action="<?php echo $this->url(array("controller" => "setor", "action" => "editar")); ?>" method="post" id="formulario" class="formulario">
+    <input type="hidden" name="id" id="id" value="<?php echo $this->registro->getId(); ?>" />
+    <div class="panel-body">
+        <?php if ($this->registro->getId()) { ?>
+            <div class="col-md-4">
+                <div class="form-group">
+                    <label for="codigo">Código:</label>
+                    <input type="text" name="codigo" id="codigo" maxlength="10" value="<?php echo $this->registro->getId(); ?>" class="form-control" disabled/>
+                </div>
+            </div>
+        <?php }
+        $tb = new TbSetorTipo();
+        if (count($tb->listar())) {
+            ?>
+            <div class="col-md-4">
+                <?php
+                $ctrl = new Escola_Form_Element_Select_Table("id_setor_tipo");
+                $ctrl->setModel("TbSetorTipo");
+                $ctrl->setPkName("id_setor_tipo");
+                $ctrl->setValue($this->registro->id_setor_tipo);
+                $ctrl->setLabel("Tipo:");
+                $ctrl->setAttrib('class', 'form-control');
+                echo $ctrl->render($this);
+                ?>
+            </div>
+        <?php
+        }
+        ?>
+        <div class="col-md-4">
+            <div class="form-group">
+                <label for="sigla">Sigla:</label>
+                <input type="text" name="sigla" id="sigla" maxlength="10" value="<?php echo $this->registro->sigla; ?>" class="form-control" />
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="form-group">
+                <label for="descricao">Descrição:</label>
+                <input type="text" name="descricao" id="descricao" maxlength="60" value="<?php echo $this->registro->descricao; ?>" class="form-control" />
+            </div>
+        </div>
+
+
+        <?php
+        $tb = new TbSetorNivel();
+        if (count($tb->listar())) {
+        ?>
+            <div class="col-md-4">
+        <?php
+            $ctrl = new Escola_Form_Element_Select_Table("id_setor_nivel");
+            $ctrl->setModel("TbSetorNivel");
+            $ctrl->setPkName("id_setor_nivel");
+            $ctrl->setValue($this->registro->id_setor_nivel);
+            $ctrl->setLabel("Nível");
+            $ctrl->setAttrib('class', 'form-control');
+            echo $ctrl->render($this);
+        ?>
+            </div>
+            <?php
+        }
+        $tb = new TbFuncionarioFuncaoTipo();
+        if (count($tb->listar())) {
+            ?>
+            <div class="col-md-4">
+            <?php
+            $ctrl = new Escola_Form_Element_Select_Table("id_funcionario_funcao_tipo");
+            $ctrl->setModel("TbFuncionarioFuncaoTipo");
+            $ctrl->setPkName("id_funcionario_funcao_tipo");
+            $ctrl->setValue($this->registro->id_funcionario_funcao_tipo);
+            $ctrl->setLabel("Tipo de Função Vinculada");
+            $ctrl->setAttrib('class', 'form-control');
+            echo $ctrl->render($this);
+            ?>
+            </div>
+            <?php
+        }
+        $tb = new TbSetor();
+        if (count($tb->listar())) {
+            ?>
+            <div class="col-md-4">
+            <?php
+            $ctrl = new Escola_Form_Element_Select_Table("id_setor_superior");
+            $ctrl->setModel("TbSetor");
+            $ctrl->setPkName("id_setor");
+            $ctrl->setValue($this->registro->id_setor_superior);
+            $ctrl->setLabel("Setor Superior");
+            $ctrl->setAttrib('class', 'form-control');
+            echo $ctrl->render($this);
+            ?>
+            </div>
+            <?php
+        }
+        ?>
+        <div class="col-md-4">
+            <div class="form-group">
+                <label for="protocolo">Protocolo?:</label>
+                <select name="protocolo" id="protocolo" class="form-control">
+                    <option value="S" <?php echo ($this->registro->protocolo == "S")?"selected":""; ?>>SIM</option>
+                    <option value="N" <?php echo ($this->registro->protocolo == "N")?"selected":""; ?>>NÃO</option>
+                </select>
+            </div>
+        </div>
+    </div>
+    </form>
+</section>

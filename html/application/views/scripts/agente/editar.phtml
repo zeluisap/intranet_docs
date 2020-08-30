@@ -1,0 +1,33 @@
+<section class="panel">
+    <header class="panel-heading">CADASTRO DE AGENTES DE TRÂNSITO</header>
+    <div class="panel-body">
+        <form action="<?php echo $this->url(array("controller" => $this->getRequest()->getControllerName(), "action" => $this->getRequest()->getActionName())); ?>" method="post" id="formulario" class="formulario">
+            <?php if ($this->registro->getId()) { ?>
+                <input type="hidden" name="id" id="id" value="<?php echo $this->registro->getId(); ?>" />
+            <?php } ?>
+            <?php if ($this->registro->getId()) { ?>
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label for="codigo">Código:</label>
+                        <input type="text" name="codigo" id="codigo" maxlength="60" value="<?php echo $this->registro->getId(); ?>" class="form-control" disabled/>
+                    </div>
+                </div>
+            <?php } ?>
+            <div class="col-md-4">
+                <div class="-group">
+                    <label for="codigo">Código:</label>
+                    <input type="text" name="codigo" id="codigo" size="5" value="<?php echo $this->registro->codigo; ?>" class="form-control" />
+                </div>
+            </div>
+            <div class="col-md-4">
+                <?php
+                $ctrl = new Escola_Form_Element_Select_Table_Funcionario("id_funcionario");
+                $ctrl->setValue($this->registro->id_funcionario);
+                $ctrl->setLabel("Funcionário: ");
+                $ctrl->setAttrib('class', 'form-control');
+                echo $ctrl->render($this);
+                ?>
+            </div>
+        </form>
+    </div>
+</section>

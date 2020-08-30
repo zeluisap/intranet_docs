@@ -1,0 +1,40 @@
+<section class="panel">
+    <header class="panel-heading">
+        Informe a Operação:
+    </header>
+    <div class="panel-body">
+        <form action="" method="post" id="formulario">
+            <input type="hidden" name="controller" id="controller" value="<?php echo $this->getRequest()->getControllerName(); ?>" />
+            <input type="hidden" name="action" id="action" value="<?php echo $this->getRequest()->getActionName(); ?>" />
+            <div class="col-sm-10">
+                <div class="radio">
+                  <label>
+                    <input type="radio" name="operacao" id="operacao_corrige_licenca" value="corrigelicenca" />
+                    <label for="operacao_corrige_licenca">Corrige Licença:</label>
+                  </label>
+                </div>
+                <div class="radio">
+                  <label>
+                    <input type="radio" name="operacao" id="operacao_agrupa_transporte_pj" value="agrupatransportepj" />
+                    <label for="operacao_agrupa_transporte_pj">Agrupa Transportes - PJ:</label>
+                  </label>
+                </div>
+                <div class="radio">
+                  <label>
+                    <input type="radio" name="operacao" id="operacao_relatorio_servico_sem_relatorio" value="servicosemrelatorio" />
+                    <label for="operacao_relatorio_servico_sem_relatorio">Serviços Sem Relatório:</label>
+                  </label>
+                </div>
+                <div class="radio">
+                  <label>
+                    <input type="radio" name="operacao" id="operacao_agrupa_vinculo_coordenador" value="agrupavinculocoordenador" />
+                    <label for="operacao_agrupa_vinculo_coordenador">Agrupa Vínculo Coordenador:</label>
+                  </label>
+                </div>
+            </div>
+        </form>
+    </div>
+    <div class="panel-footer">
+        
+    </div>
+</section>

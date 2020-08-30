@@ -1,0 +1,41 @@
+<section class="panel">
+    <header class="panel-heading">ADICIONAR AUTO DE INFRAÇÃO</header>
+    <div class="panel-body">
+        <form action="<?php echo $this->url(array("controller" => $this->getRequest()->getControllerName(), "action" => $this->getRequest()->getActionName())); ?>" method="post" id="formulario" class="formulario">
+            <div class="col-md-4">
+                <?php
+                $ctrl = new Escola_Form_Element_Select_Table("id_servico_tipo");
+                $ctrl->setPkName("id_servico_tipo");
+                $ctrl->setModel("TbServicoTipo");
+                $ctrl->setLabel("Tipo:");
+                $ctrl->setAttrib('class', 'form-control');
+                echo $ctrl->render($this);
+                ?>
+            </div>
+            <div class="col-md-4">
+                <div class="form-group">
+                    <div class="col-md-6">
+                    <label for="codigo_inicio" class="control-label">Início da Numeração:</label>
+                    <input type="text" name="caracter" id="caracter" class="form-control caracter" value="A" />
+                    </div>
+                    <div class="col-md-6">
+                        <label for="codigo_inicio">&nbsp;</label>
+                    <input type="text" name="codigo_inicio" id="codigo_inicio" size="5" value="" class="form-control" />
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="form-group">
+                    <div class="col-md-6">
+                    <label for="codigo_final" class="control-label">Final da Numeração:</label>
+                    <input type="text" name="caracter_final" id="caracter_final" disabled class="caracter form-control" />
+                    </div>
+                    <div class="col-md-6">
+                        <label for="codigo_final">&nbsp;</label>
+                    <input type="text" name="codigo_final" id="codigo_final" size="5" value="" class="form-control" />
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</section>

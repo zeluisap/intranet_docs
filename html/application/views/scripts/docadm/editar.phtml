@@ -1,0 +1,68 @@
+<section class="panel">
+    <header class="panel-heading">CADASTRO DE DOCUMENTO ADMINISTRATIVO</header>
+    <form action="<?php echo $this->url(array("controller" => $this->getRequest()->getControllerName(), "action" => "editar")); ?>" method="post" id="formulario" class="formulario" enctype="multipart/form-data">
+        <input type="hidden" name="id" id="id" value="<?php echo $this->registro->getId(); ?>" />
+    <div class="panel-body">
+        <?php if ($this->registro->getId()) { ?>
+            <div class="col-md-4">
+                <div class="form-group">
+                    <label for="codigo">Código:</label>
+                    <input type="text" name="codigo" id="codigo" maxlength="10" value="<?php echo $this->registro->getId(); ?>" class="form-control" disabled/>
+                </div>
+            </div>
+        <?php } ?>
+        <?php
+        $tb = new TbDocumentoTipoTarget();
+        $dtt = $tb->getPorChave("A");
+        $tb = new TbDocumentoTipo();
+        $dts = $tb->listar(array("filtro_id_documento_tipo_target" => $dtt->getId()));
+        if ($dts && count($dts)) {
+            ?>
+            <div class="col-md-4">
+                <div class="form-group">
+                    <label for="id_documento_tipo">Tipo:</label>
+
+                    <select name="id_documento_tipo" id="id_documento_tipo" class="filtro form-control">
+                        <option value="" <?php echo (!$this->registro->id_documento_tipo)?"selected":""; ?>>==> SELECIONE <==</option>
+                        <?php foreach ($dts as $dt) { ?>
+                            <option value="<?php echo $dt->getId(); ?>"  <?php echo ($this->registro->id_documento_tipo == $dt->getId())?"selected":""; ?>><?php echo $dt->toString(); ?></option>
+                        <?php } ?>
+                    </select>
+
+                </div>
+            </div>
+        <?php } ?>
+        <div class="col-md-4">
+            <div class="form-group">
+                <label for="arquivo">Arquivo:</label>
+                <input type="file" name="arquivo" id="arquivo" class="form-control" />
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="form-group linha_numero">
+                <label for="numero">Número:</label>
+                <input type="text" name="numero" id="numero" maxlength="50" value="<?php echo $this->registro->numero; ?>" class="form-control" />
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="form-group linha_numero">
+                <label for="ano">Ano:</label>
+                <input type="text" name="ano" id="ano" maxlength="4" value="<?php echo $this->registro->ano; ?>" class="form-control" />
+            </div>
+        </div>
+        <div class="col-md-12">
+            <div class="form-group">
+                <label for="resumo">Resumo:</label>
+                <textarea name="resumo" id="resumo" class="filtro form-control"><?php echo $this->registro->resumo; ?></textarea>
+            </div>
+        </div>
+        <div class="col-md-12">
+            <div class="form-group">
+                <label for="localizacao_fisica">Localização Física:</label>
+                <textarea name="localizacao_fisica" id="localizacao_fisica" class="filtro form-control"><?php echo $this->registro->localizacao_fisica; ?></textarea>
+            </div>
+        </div>
+
+    </div>
+    </form>
+</section>

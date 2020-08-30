@@ -1,0 +1,67 @@
+<section class="panel">
+    <header class="panel-heading">
+        Pacotes
+    </header>
+
+    <table class="table table-striped m-b-none text-sm table-vcenter">
+        <thead>
+        <tr>
+            <th>Sigla</th>
+            <th>Descrição</th>
+            <th>Resumo</th>
+            <th>Ícone</th>
+            <th>Status</th>
+            <th>Ordem</th>
+            <th class="text-right">Operações</th>
+        </tr>
+        </thead>
+        <?php if ($this->registros) { ?>
+            <tbody>
+            <?php
+            foreach ($this->registros as $registro) {
+                ?>
+                <tr>
+                    <td>
+                        <?php echo $registro->sigla; ?>
+                    </td>
+                    <td>
+                        <?php echo $registro->descricao; ?>
+                    </td>
+                    <td>
+                        <?php echo $registro->resumo; ?>
+                    </td>
+                    <td width="40px">
+                        <div class="text-center">
+                            <?php if ($registro->icone) { ?>
+                                <i class="<?php echo $registro->icone; ?> icon-large"></i>
+                            <?php } ?>
+                        </div>
+                    </td>
+                    <td><div class="text-center"><?php echo $registro->mostrar_status(); ?></div></td>
+                    <td>
+                        <?php echo $registro->ordem; ?>
+                    </td>
+                    <td class="text-right">
+                        <div class="btn-group">
+                            <a class="btn btn-white" data-container="body" href="<?php echo $this->url(array("controller" => $this->getRequest()->getControllerName(),"action" => "modulo","id" => $registro->getId())); ?>" data-toggle="tooltip" title="Módulos">
+                                <i class="icon-list"></i>
+                            </a>
+                            <a class="btn btn-white" data-container="body" href="<?php echo $this->url(array("controller" => $this->getRequest()->getControllerName(),"action" => "view","id" => $registro->getId())); ?>" data-toggle="tooltip" title="Visualizar">
+                                <i class="icon-zoom-in"></i>
+                            </a>
+                            <a class="btn btn-white" data-container="body" href="<?php echo $this->url(array("controller" => $this->getRequest()->getControllerName(),"action" => "editar","id" => $registro->getId())); ?>" data-toggle="tooltip" title="Alterar">
+                                <i class="icon-cog"></i>
+                            </a>
+                            <a class="btn btn-danger" data-container="body" href="<?php echo $this->url(array("controller" => $this->getRequest()->getControllerName(),"action" => "excluir","id" => $registro->getId())); ?>" class="link_excluir" id="ExcluirModulo" data-toggle="tooltip" title="Excluir">
+                                <i class="icon-trash"></i>
+                            </a>
+                        </div>
+                    </td>
+                </tr>
+            <?php } ?>
+            </tbody>
+        <?php } ?>
+    </table>
+
+    <div class="panel-footer"><?php echo $this->paginationControl($this->registros, "sliding", "minha_paginacao_control.phtml"); ?></div>
+</section>

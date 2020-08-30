@@ -1,0 +1,33 @@
+<section class="panel">
+    <header class="panel-heading">Visualizar Motorista</header>
+    <div class="panel-body">
+        <dl class="dl-horizontal">
+            <dt>ID:</dt>
+            <dd><?php echo $this->registro->getId(); ?></dd>
+        </dl>
+        <dl class="dl-horizontal">
+            <dt>Grupo de Transporte:</dt>
+            <dd><?php echo $this->registro->findParentRow("TbTransporteGrupo")->toString(); ?></dd>
+        </dl>
+        <dl class="dl-horizontal">
+            <dt>Matrícula:</dt>
+            <dd><?php echo $this->registro->matricula; ?></dd>
+        </dl>
+        <dl class="dl-horizontal">
+            <dt>C.P.F.:</dt>
+            <dd><?php echo $this->pf->mostrar_documento(); ?></dd>
+        </dl>
+        <dl class="dl-horizontal">
+            <dt>Nome:</dt>
+            <dd><?php echo $this->pf->mostrar_nome(); ?></dd>
+        </dl>
+        <dl class="dl-horizontal">
+            <dt>CNH:</dt>
+            <dd><?php echo $this->pm->toString(); ?></dd>
+        </dl>
+        <dl class="dl-horizontal">
+            <dt>Status:</dt>
+            <dd><?php echo $this->registro->mostrarStatus(); ?></dd>
+        </dl>
+    </div>
+</section>

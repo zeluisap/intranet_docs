@@ -1,0 +1,56 @@
+<section class="panel">
+    <header class="panel-heading">Cadastro de Grupo</header>
+    <div class="panel-body">
+        <form action="<?php echo $this->url(array("controller" => "grupo", "action" => "editar")); ?>" method="post" id="formulario">
+            <input type="hidden" name="id" id="id" value="<?php echo $this->grupo->getId(); ?>" />
+                <?php if ($this->grupo->getId()) { ?>
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label for="codigo">Código:</label>
+                            <input type="text" value="<?php echo $this->grupo->getId(); ?>"  class="form-control" disabled/>
+                        </div>
+                    </div>
+                <?php } ?>
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label for="descricao">Descrição:</label>
+                        <input type="text" name="descricao" id="descricao" size="60" maxlength="60" value="<?php echo $this->grupo->descricao; ?>"  class="form-control" />
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label for="padrao">Padrão:</label>
+                        <select name="padrao" id="padrao" class="form-control" >
+                            <option value="" <?php echo (!$this->grupo->padrao)?"selected":""; ?> >==> SELECIONE <==</option>
+                            <option value="S" <?php echo ($this->grupo->padrao == "S")?"selected":""; ?>>SIM</option>
+                            <option value="N" <?php echo ($this->grupo->padrao == "N")?"selected":""; ?>>NÃO</option>
+                        </select>
+                    </div>
+                </div>
+
+                <?
+                $tb = new TbGrupo();
+                $rg = $tb->fetchAll();
+                $grupos = array();
+                foreach ($rg as $obj) {
+                    if ($this->grupo->getId() != $obj->getId()) {
+                        $grupos[] = $obj;
+                    }
+                }
+                if (count($grupos)) {
+                    ?>
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label for="descricao">Grupo Inferior:</label>
+                            <select name="id_grupo_inferior" id="id_grupo_inferior" class="form-control" >
+                                <option value="" <?php echo (!$this->grupo->id_grupo_inferior)?"selected":""; ?>>==> SELECIONE <==</option>
+                                <?php foreach ($grupos as $grupo) { ?>
+                                    <option value="<?php echo $grupo->getId(); ?>" <?php echo ($this->grupo->id_grupo_inferior == $grupo->getId())?"selected":""; ?>><?php echo $grupo->descricao; ?></option>
+                                <?php } ?>
+                            </select>
+                        </div>
+                    </div>
+                <?php } ?>
+        </form>
+    </div>
+</section>

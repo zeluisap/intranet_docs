@@ -1,0 +1,168 @@
+<section class="panel" id="idPesquisa" style="display: none">
+    <header class="panel-heading">
+        Opções de Pesquisa
+    </header>
+    <form action="<?php echo $this->url(array("controller" => $this->getRequest()->getControllerName(), "action" => "index")); ?>" method="post" id="formulario" class="formulario">
+    <div class="panel-body">
+        <div class="col-md-4">
+        <div class="form-group">
+            <label for="filtro_placa">Placa:</label>
+            <input type="text" class="filtro form-control placa" name="filtro_placa" id="filtro_placa" value="<?php echo $this->dados["filtro_placa"]; ?>" />
+        </div>
+        </div>
+        <div class="col-md-4">
+        <div class="form-group">
+            <label for="filtro_chassi">Chassi:</label>
+            <input type="text" class="filtro form-control" name="filtro_chassi" id="filtro_chassi" value="<?php echo $this->dados["filtro_chassi"]; ?>" />
+        </div>
+        </div>
+        <div class="col-md-4">
+        <div class="form-group">
+            <label for="filtro_proprietario">Nome Proprietário:</label>
+            <input type="text" class="filtro form-control" name="filtro_proprietario" id="filtro_proprietario" value="<?php echo $this->dados["filtro_proprietario"]; ?>" />
+        </div>
+        </div>
+        <div class="col-md-4">
+        <?php
+        $ctrl = new Escola_Form_Element_Select_Table("filtro_id_fabricante");
+        $ctrl->setAttrib("class", "filtro");
+        $ctrl->setPkName("id_fabricante");
+        $ctrl->setModel("TbFabricante");
+        $ctrl->setValue($this->dados["filtro_id_fabricante"]);
+        $ctrl->setLabel("Fabricante:");
+        $ctrl->setAttrib('class', 'form-control');
+        echo $ctrl->render($this);
+        ?>
+        </div>
+    </div>
+    <div class="panel-footer">
+        <input type="submit" value="Pesquisar" class="acao btn btn-primary" />
+        <input type="button" value="Limpar Filtro" id="idLimparPesquisa" class="btn" />
+    </div>
+    </form>
+</section>
+
+<section class="panel">
+    <header class="panel-heading">
+        Lista de Veículos
+    </header>
+    <table class="table table-striped table-condensed table-hover">
+        <thead>
+        <tr>
+            <th>Chassi</th>
+            <th>Placa</th>
+            <th>Tipo</th>
+            <th>Categoria</th>
+            <th>Proprietário</th>
+            <th>Estado</th>
+            <th>Combustível</th>
+            <th>Fabricante</th>
+            <th>Ano Fabricação</th>
+            <th>Data Aquisição</th>
+            <th>Renavan</th>
+            <th width="20%" class="text-right">Operações</th>
+        </tr>
+        </thead>
+        <?php if ($this->registros && count($this->registros)) { ?>
+            <tbody>
+            <?php
+            foreach ($this->registros as $registro) {
+                $txt_vc = "--";
+                $vc = $registro->findParentRow("TbVeiculoCategoria");
+                if ($vc) {
+                    $txt_vc = $vc->toString();
+                }
+                $txt_pessoa = "--";
+                $pessoa = $registro->findParentRow("TbPessoa");
+                if ($pessoa) {
+                    $txt_pessoa = $pessoa->toString();
+                }
+                ?>
+                <tr>
+                    <td>
+                        <a href="<?php echo $this->url(array("action" => "view", "id" => $registro->getId())); ?>">
+                            <?php echo $registro->chassi; ?>
+                        </a>
+                    </td>
+                    <td>
+                        <a href="<?php echo $this->url(array("action" => "view", "id" => $registro->getId())); ?>">
+                            <?php echo $registro->placa; ?>
+                        </a>
+                    </td>
+                    <td>
+                        <a href="<?php echo $this->url(array("action" => "view", "id" => $registro->getId())); ?>">
+                            <?php echo $registro->findParentRow("TbVeiculoTipo")->toString(); ?>
+                        </a>
+                    </td>
+                    <td>
+                        <a href="<?php echo $this->url(array("action" => "view", "id" => $registro->getId())); ?>">
+                            <?php echo $txt_vc; ?>
+                        </a>
+                    </td>
+                    <td>
+                        <a href="<?php echo $this->url(array("action" => "view", "id" => $registro->getId())); ?>">
+                            <?php echo $txt_pessoa; ?>
+                        </a>
+                    </td>
+                    <td>
+                        <a href="<?php echo $this->url(array("action" => "view", "id" => $registro->getId())); ?>">
+                            <?php echo $registro->findParentRow("TbUf")->toString(); ?>
+                        </a>
+                    </td>
+                    <td>
+                        <a href="<?php echo $this->url(array("action" => "view", "id" => $registro->getId())); ?>">
+                            <?php echo $registro->findParentRow("TbCombustivel")->toString(); ?>
+                        </a>
+                    </td>
+                    <td>
+                        <a href="<?php echo $this->url(array("action" => "view", "id" => $registro->getId())); ?>">
+                            <?php echo $registro->findParentRow("TbFabricante")->toString(); ?>
+                        </a>
+                    </td>
+                    <td>
+                        <a href="<?php echo $this->url(array("action" => "view", "id" => $registro->getId())); ?>">
+                            <?php echo $registro->ano_fabricacao; ?>
+                        </a>
+                    </td>
+                    <td>
+                        <a href="<?php echo $this->url(array("action" => "view", "id" => $registro->getId())); ?>">
+                            <?php echo Escola_Util::formatData($registro->data_aquisicao); ?>
+                        </a>
+                    </td>
+                    <td>
+                        <a href="<?php echo $this->url(array("action" => "view", "id" => $registro->getId())); ?>">
+                            <?php echo $registro->renavan; ?>
+                        </a>
+                    </td>
+                    <td>
+                        <div class="btn-group pull-right">
+                            <a href="<?php echo $this->url(array("controller" => $this->getRequest()->getControllerName(),
+                                "action" => "view",
+                                "id" => $registro->getId())); ?>" class="btn btn-white" data-toggle="tooltip" data-container="body" title="Visualizar">
+                                <i class="icon-search"></i>
+                            </a>
+                            <a href="<?php echo $this->url(array("controller" => $this->getRequest()->getControllerName(),
+                                "action" => "editar",
+                                "id" => $registro->getId())); ?>" class="btn btn-white" data-toggle="tooltip" data-container="body" title="Editar">
+                                <i class="icon-cog"></i>
+                            </a>
+                            <a href="<?php echo $this->url(array("controller" => $this->getRequest()->getControllerName(),
+                                "action" => "excluir",
+                                "id" => $registro->getId())); ?>" class="btn btn-danger link_excluir" data-toggle="tooltip" data-container="body" title="Excluir">
+                                <i class="icon-trash"></i>
+                            </a>
+                        </div>
+                    </td>
+                </tr>
+            <?php } ?>
+            </tbody>
+        <?php } ?>
+    </table>
+    <div class="panel-footer">
+
+        <?php if ($this->registros && count($this->registros)) {
+            echo $this->paginationControl($this->registros, "sliding", "minha_paginacao_control.phtml");
+        }
+        ?>
+    </div>
+</section>

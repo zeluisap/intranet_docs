@@ -1,0 +1,32 @@
+<section class="panel">
+    <header class="panel-heading">Visualizar Serviço</header>
+    <div class="panel-body">
+        <dl class="dl-horizontal">
+            <dt>Id:</dt>
+            <dd><?php echo $this->registro->getId(); ?></dd>
+        </dl>
+        <dl class="dl-horizontal">
+            <dt>Tipo:</dt>
+            <dd><?php echo $this->registro->findParentRow("TbServicoTipo"); ?></dd>
+        </dl>
+        <dl class="dl-horizontal">
+            <dt>Código:</dt>
+            <dd><?php echo $this->registro->codigo; ?></dd>
+        </dl>
+        <dl class="dl-horizontal">
+            <dt>Descrição:</dt>
+            <dd><?php echo $this->registro->descricao; ?></dd>
+        </dl>
+        <?php
+        $servico_referencia = "--";
+        $sr = $this->registro->findParentRow("TbServicoReferencia");
+        if ($sr) {
+            $servico_referencia = $sr->toString();
+        }
+        ?>
+        <dl class="dl-horizontal">
+            <dt>Tipo Referência:</dt>
+            <dd><?php echo $servico_referencia; ?></dd>
+        </dl>
+    </div>
+</section>

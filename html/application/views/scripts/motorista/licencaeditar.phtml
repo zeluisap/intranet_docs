@@ -1,0 +1,58 @@
+<?php
+$txt_ss = $txt_id = $txt_data_vencimento = $txt_data_validade = $txt_ano_referencia = $txt_id_stg = "";
+if ($this->ss) {
+    $txt_id = $this->ss->getId();
+    $txt_ss = $this->ss->toString();
+
+    $txt_data_vencimento = Escola_Util::formatData($this->ss->data_vencimento);
+    $txt_data_validade = Escola_Util::formatData($this->ss->data_validade);
+    $txt_ano_referencia = $this->ss->ano_referencia;
+
+    $txt_id_stg = $this->stg->getId();
+}
+?>
+<section class="panel">
+    <header class="panel-heading">ALTERAÇAO DE SOLICITAÇAO DE SERVIÇO</header>
+    <div class="panel-body">
+        <form action="<?php echo $this->url(array("controller" => $this->getRequest()->getControllerName(), "action" => $this->getRequest()->getActionName())); ?>" method="post" id="formulario" class="formulario">
+            <input type="hidden" name="id" id="id" value="<?php echo $txt_id; ?>" />
+            <dl class="dl-horizontal">
+                <dt>ID:</dt>
+                <dd><?php echo $txt_id; ?></dd>
+            </dl>
+            <dl class="dl-horizontal">
+                <dt>Solicitaçao de Serviço:</dt>
+                <dd><?php echo $txt_ss; ?></dd>
+            </dl>
+            <div class="col-md-4">
+                <div class="form-group">
+                    <label for="id_servico_transporte_grupo" class="control-label">Serviço:</label>
+                    <select name="id_servico_transporte_grupo" id="id_servico_transporte_grupo" class="form-control">
+                        <option value="" <?php echo (!$txt_id_stg) ? "selected" : ""; ?>>==> SELECIONE <==</option>
+                        <?php foreach ($this->stgs as $stg) { ?>
+                            <option value="<?php echo $stg->getId(); ?>" <?php echo ($txt_id_stg == $stg->getId()) ? "selected" : ""; ?>><?php echo $stg->toString(); ?></option>
+                        <?php } ?>
+                    </select>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="form-group">
+                    <label for="ano_referencia" class="control-label">Ano Referência:</label>
+                    <input type="text" name="ano_referencia" id="ano_referencia" class="form-control" value="<?php echo $txt_ano_referencia; ?>" />
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="form-group">
+                    <label for="data_vencimento" class="control-label">Data de Vencimento:</label>
+                    <input type="text" name="data_vencimento" id="data_vencimento" class="form-control data" value="<?php echo $txt_data_vencimento; ?>" />
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="form-group">
+                    <label for="data_validade" class="control-label">Data de Validade:</label>
+                    <input type="text" name="data_validade" id="data_validade" class="form-control data" value="<?php echo $txt_data_validade; ?>" />
+                </div>
+            </div>
+        </form>
+    </div>
+</section>

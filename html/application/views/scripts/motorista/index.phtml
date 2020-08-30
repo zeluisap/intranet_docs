@@ -1,0 +1,169 @@
+<section class="panel" id="idPesquisa" style="display: none">
+    <header class="panel-heading">Opções de Pesquisa</header>
+    <form action="<?php echo $this->url(array("controller" => $this->getRequest()->getControllerName(), "action" => "index")); ?>" method="post" id="formulario" class="formulario">
+    <div class="panel-body">
+        <div class="col-md-4">
+            <?php
+            $ctrl = new Escola_Form_Element_Select_Table("filtro_id_transporte_grupo");
+            $ctrl->setAttrib("class", "filtro");
+            $ctrl->setPkName("id_transporte_grupo");
+            $ctrl->setModel("TbTransporteGrupo");
+            $ctrl->setValue($this->dados["filtro_id_transporte_grupo"]);
+            $ctrl->setLabel("Grupo de Transporte:");
+            $ctrl->setAttrib('class', 'form-control');
+            echo $ctrl->render($this);
+            ?>
+        </div>
+        <div class="col-md-4">
+            <div class="form-group">
+                <label for="filtro_matricula">Matrícula:</label>
+                <input type="text" class="filtro form-control" name="filtro_matricula" id="filtro_matricula" value="<?php echo $this->dados["filtro_matricula"]; ?>" />
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="form-group">
+                <label for="filtro_cpf">C.P.F.:</label>
+                <input type="text" class="filtro form-control cpf" name="filtro_cpf" id="filtro_cpf" value="<?php echo $this->dados["filtro_cpf"]; ?>" />
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="form-group">
+                <label for="filtro_nome">Nome:</label>
+                <input type="text" class="filtro form-control" name="filtro_nome" id="filtro_nome" value="<?php echo $this->dados["filtro_nome"]; ?>" />
+            </div>
+        </div>
+    </div>
+    <div class="panel-footer">
+        <input type="submit" value="Pesquisar" class="acao btn btn-primary" />
+        <input type="button" value="Limpar Filtro" id="idLimparPesquisa" class="btn" />
+    </div>
+    </form>
+</section>
+
+<section class="panel">
+    <header class="panel-heading">Lista de Motorista</header>
+
+    <div class="row-fluid">
+        <div class="span12">
+            <table class="table table-striped table-condensed table-hover m-b-none text-sm table-vcenter">
+                <thead>
+                <tr>
+                    <th>Grupo de Transporte</th>
+                    <th>Data Cadastro</th>
+                    <th>Matrícula</th>
+                    <th>C.P.F.</th>
+                    <th>Nome</th>
+                    <th>Número CNH</th>
+                    <th>Categoria CNH</th>
+                    <th>Validade CNH</th>
+                    <th>Status</th>
+                    <th width="25%" class="text-right">Operações</th>
+                </tr>
+                </thead>
+                <?php if ($this->registros && count($this->registros)) { ?>
+                    <tbody>
+                    <?php
+                    foreach ($this->registros as $registro) {
+                        $pm = $registro->findParentRow("TbPessoaMotorista");
+                        $pf = $pm->findParentRow("TbPessoaFisica");
+                        $cnh_categoria = $pm->findParentRow("TbCnhCategoria");
+                        $tg = $registro->findParentRow("TbTransporteGrupo");
+                        ?>
+                        <tr>
+                            <td>
+                                <a href="<?php echo $this->url(array("action" => "view", "id" => $registro->getId())); ?>">
+                                    <?php echo $tg->toString(); ?>
+                                </a>
+                            </td>
+                            <td>
+                                <a href="<?php echo $this->url(array("action" => "view", "id" => $registro->getId())); ?>">
+                                    <?php echo Escola_Util::formatData($registro->data_cadastro); ?>
+                                </a>
+                            </td>
+                            <td>
+                                <a href="<?php echo $this->url(array("action" => "view", "id" => $registro->getId())); ?>">
+                                    <?php echo $registro->matricula; ?>
+                                </a>
+                            </td>
+                            <td>
+                                <a href="<?php echo $this->url(array("action" => "view", "id" => $registro->getId())); ?>">
+                                    <?php echo $pf->mostrar_documento(); ?>
+                                </a>
+                            </td>
+                            <td>
+                                <a href="<?php echo $this->url(array("action" => "view", "id" => $registro->getId())); ?>">
+                                    <?php echo $pf->mostrar_nome(); ?>
+                                </a>
+                            </td>
+                            <td>
+                                <a href="<?php echo $this->url(array("action" => "view", "id" => $registro->getId())); ?>">
+                                    <?php echo $pm->cnh_numero; ?>
+                                </a>
+                            </td>
+                            <td>
+                                <a href="<?php echo $this->url(array("action" => "view", "id" => $registro->getId())); ?>">
+                                    <?php echo $cnh_categoria->toString(); ?>
+                                </a>
+                            </td>
+                            <td>
+                                <a href="<?php echo $this->url(array("action" => "view", "id" => $registro->getId())); ?>">
+                                    <?php echo Escola_Util::formatData($pm->cnh_validade); ?>
+                                </a>
+                            </td>
+                            <td>
+                                <a href="<?php echo $this->url(array("action" => "view", "id" => $registro->getId())); ?>">
+                                    <?php echo $registro->mostrarStatus(); ?>
+                                </a>
+                            </td>
+                            <td>
+                                <div class="btn-group pull-right">
+                                    <!--
+                                    <a href="<?php echo $this->url(array("controller" => $this->getRequest()->getControllerName(),
+                                        "action" => "carteira",
+                                        "id" => 0, "id_motorista" => $registro->getId())); ?>" class="btn" title="Carteiras">
+                                        <i class="icon-list-alt"></i>
+                                    </a>
+-->
+                                    <a href="<?php echo $this->url(array("controller" => $this->getRequest()->getControllerName(),
+                                        "action" => "licenca",
+                                        "id_motorista" => $registro->getId(),
+                                        "id" => 0)); ?>" class="btn btn-white" data-toggle="tooltip" data-container="body" title="Serviços">
+                                        <i class="icon-copy"></i>
+                                    </a>
+                                    <a href="<?php echo $this->url(array("controller" => $this->getRequest()->getControllerName(),
+                                        "action" => "relatorio",
+                                        "id_motorista" => $registro->getId(),
+                                        "id" => 0)); ?>" class="btn btn-white" data-toggle="tooltip" data-container="body" title="Relatórios">
+                                        <i class="icon-print"></i>
+                                    </a>
+                                    <a href="<?php echo $this->url(array("controller" => $this->getRequest()->getControllerName(),
+                                        "action" => "view",
+                                        "id" => $registro->getId())); ?>" class="btn btn-white" data-toggle="tooltip" data-container="body" title="Visualizar">
+                                        <i class="icon-search"></i>
+                                    </a>
+                                    <a href="<?php echo $this->url(array("controller" => $this->getRequest()->getControllerName(),
+                                        "action" => "editar",
+                                        "id" => $registro->getId()));
+                                    ?>" class="btn btn-white" data-toggle="tooltip" data-container="body" title="Alterar">
+                                        <i class="icon-cog"></i>
+                                    </a>
+                                    <a href="<?php echo $this->url(array("controller" => $this->getRequest()->getControllerName(),
+                                        "action" => "excluir",
+                                        "id" => $registro->getId())); ?>" class="btn btn-danger link_excluir" data-toggle="tooltip" data-container="body" title="Excluir">
+                                        <i class="icon-trash"></i>
+                                    </a>
+
+                                </div>
+                            </td>
+                        </tr>
+                    <?php } ?>
+                    </tbody>
+                <?php } ?>
+            </table>
+    <div class="panel-footer">
+        <?php if ($this->registros && count($this->registros)) {
+            echo $this->paginationControl($this->registros, "sliding", "minha_paginacao_control.phtml");
+        }
+        ?>
+    </div>
+</section>

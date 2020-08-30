@@ -1,0 +1,14 @@
+<section class="panel">
+    <header class="panel-heading">Visualizar Auto de Infração > Ocorrência > Notificação</header>
+    <div class="panel-body">
+        <dl class="dl-horizontal">
+            <dt>Auto de Infração:</dt>
+            <dd><?php echo $this->ai->toString(); ?></dd>
+        </dl>
+        <dl class="dl-horizontal">
+            <dt>Ocorrência:</dt>
+            <dd><?php echo $this->ocorrencia->toString(); ?></dd>
+        </dl>
+        <?php echo $this->registro->view($this); ?>
+    </div>
+</section>

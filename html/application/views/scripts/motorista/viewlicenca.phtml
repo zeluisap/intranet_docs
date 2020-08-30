@@ -1,0 +1,59 @@
+<?php
+$stg = $this->registro->findParentRow("TbServicoTransporteGrupo");
+?>
+<section class="panel">
+    <header class="panel-heading">Visualização de Motorista > Licença</header>
+    <div class="panel-body">
+        <dl class="dl-horizontal">
+            <dt>Id:</dt>
+            <dd><?php echo $this->registro->getId(); ?></dd>
+        </dl>
+        <dl class="dl-horizontal">
+            <dt>Motorista:</dt>
+            <dd><?php echo $this->motorista->toString(); ?></dd>
+        </dl>
+        <dl class="dl-horizontal">
+            <dt>Serviço:</dt>
+            <dd><?php echo $stg->findParentRow("TbServico")->toString(); ?></dd>
+        </dl>
+        <dl class="dl-horizontal">
+            <dt>Referência:</dt>
+            <dd><?php echo $this->registro->mostrar_referencia(); ?></dd>
+        </dl>
+        <dl class="dl-horizontal">
+            <dt>Data Solicitação:</dt>
+            <dd><?php echo Escola_Util::formatData($this->registro->data_solicitacao); ?></dd>
+        </dl>
+        <dl class="dl-horizontal">
+            <dt>Vencimento:</dt>
+            <dd><?php echo Escola_Util::formatData($this->registro->data_vencimento); ?></dd>
+        </dl>
+        <dl class="dl-horizontal">
+            <dt>Valor:</dt>
+            <dd><?php echo $stg->pega_valor()->toString(); ?></dd>
+        </dl>
+        <dl class="dl-horizontal">
+            <dt>Início:</dt>
+            <dd><?php echo Escola_Util::formatData($this->registro->data_inicio); ?></dd>
+        </dl>
+        <dl class="dl-horizontal">
+            <dt>Validade:</dt>
+            <dd><?php echo Escola_Util::formatData($this->registro->data_validade); ?></dd>
+        </dl>
+        <dl class="dl-horizontal">
+            <dt>Status:</dt>
+            <dd><?php echo $this->registro->mostrarStatusHTML(); ?></dd>
+        </dl>
+        <?php
+        $pag = $this->pagamento;
+        if ($pag) {
+            ?>
+            <div class="well">
+                <div class="page-header">
+                    <h4>Pagamento</h4>
+                </div>
+
+            </div>
+        <?php } ?>
+    </div>
+</section>

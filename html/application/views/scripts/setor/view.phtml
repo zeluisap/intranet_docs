@@ -1,0 +1,41 @@
+<section class="panel">
+    <header class="panel-heading">
+        Cadastro de Setor
+    </header>
+    <div class="panel-body">
+        <dl class="dl-horizontal">
+            <dt>Código:</dt>
+            <dd><?php echo $this->registro->getId(); ?></dd>
+        </dl>
+        <dl class="dl-horizontal">
+            <dt>Sigla:</dt>
+            <dd><?php echo $this->registro->sigla; ?></dd>
+        </dl>
+        <dl class="dl-horizontal">
+            <dt>Descrição:</dt>
+            <dd><?php echo $this->registro->descricao; ?></dd>
+        </dl>
+        <dl class="dl-horizontal">
+            <dt>Nível:</dt>
+            <dd><?php echo $this->registro->findParentRow("TbSetorNivel")->toString(); ?></dd>
+        </dl>
+        <?php
+        $obj = $this->registro->findParentRow("TbFuncionarioFuncaoTipo");
+        if ($obj) {
+            ?>
+            <dl class="dl-horizontal">
+                <dt>Tipo de Função Vinculada:</dt>
+                <dd><?php echo $obj->toString(); ?></dd>
+            </dl>
+        <?php } ?>
+        <?php
+        $obj = $this->registro->findParentRow("TbSetor");
+        if ($obj) {
+            ?>
+            <dl class="dl-horizontal">
+                <dt>Setor Superior:</dt>
+                <dd><?php echo $obj->toString(); ?></dd>
+            </dl>
+        <?php } ?>
+    </div>
+</section>

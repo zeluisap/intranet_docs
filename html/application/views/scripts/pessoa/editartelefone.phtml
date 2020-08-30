@@ -1,0 +1,47 @@
+<section class="panel">
+    <header class="panel-heading">CADASTRO DE PESSOA > TELEFONE</header>
+    <div class="panel-body">
+        <form action="<?php echo $this->url(array("controller" => $this->getRequest()->getControllerName(), "action" => $this->getRequest()->getActionName())); ?>" method="post" id="formulario" class="formulario">
+            <?php if ($this->registro) { ?>
+                <input type="hidden" name="id" id="id" value="<?php echo $this->registro->getId(); ?>" />
+            <?php } ?>
+            <?php if ($this->telefone->getId()) { ?>
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label for="codigo">Código:</label>
+                        <input type="text" name="codigo" id="codigo" maxlength="10" value="<?php echo $this->registro->getId(); ?>" class="form-control" disabled/>
+                    </div>
+                </div>
+            <?php } ?>
+            <div class="col-md-4">
+                <div class="form-group">
+                    <label for="codigo">Pessoa:</label>
+                    <input type="text" name="Pessoa" id="Pessoa" maxlength="10" value="<?php echo $this->pessoa->toString(); ?>" class="form-control" disabled/>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <?php
+                $ctrl = new Escola_Form_Element_Select_Table("id_telefone_tipo");
+                $ctrl->setPkName("id_telefone_tipo");
+                $ctrl->setModel("TbTelefoneTipo");
+                $ctrl->setValue($this->telefone->id_telefone_tipo);
+                $ctrl->setLabel("Tipo Telefone: ");
+                $ctrl->setAttrib('class', 'form-control');
+                echo $ctrl->render($this);
+                ?>
+            </div>
+            <div class="col-md-4">
+                <div class="form-group">
+                    <label for="ddd">DDD:</label>
+                    <input type="text" name="ddd" id="ddd" value="<?php echo $this->telefone->ddd; ?>" class="form-control" size="3" />
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="form-group">
+                    <label for="numero">Número:</label>
+                    <input type="text" name="numero" id="numero" value="<?php echo $this->telefone->numero; ?>" class="form-control" />
+                </div>
+            </div>
+        </form>
+    </div>
+</section>

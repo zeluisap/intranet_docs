@@ -1,0 +1,153 @@
+<section class="panel" id="idPesquisa" style="display:none;">
+    <header class="panel-heading">
+        Opções de Pesquisa
+    </header>
+    <form action="<?php echo $this->url(array("controller" => $this->getRequest()->getControllerName(), "action" => $this->getRequest()->getActionName())); ?>" method="post" id="formulario" class="formulario">
+    <div class="panel-body">
+        <div class="col-md-4">
+            <div class="form-group">
+                <label for="filtro_placa">Placa do Veículo:</label>
+                <input type="text" name="filtro_placa" id="filtro_placa" value="<?php echo $this->dados["filtro_placa"]; ?>" class="form-control filtro placa" />
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="form-group">
+                <label for="filtro_chassi">Número do Chassi:</label>
+                <input type="text" name="filtro_chassi" id="filtro_chassi" value="<?php echo $this->dados["filtro_chassi"]; ?>" class="form-control filtro" />
+            </div>
+        </div>
+    </div>
+    <div class="panel-footer">
+        <input type="submit" value="Pesquisar" class="acao btn btn-primary" />
+        <input type="button" value="Limpar Filtro" id="idLimparPesquisa" class="btn" />
+    </div>
+    </form>
+</section>
+<section class="panel">
+    <header class="panel-heading">
+        Transporte: <?php echo $this->transporte->toString(); ?>
+    </header>
+    <table class="table table-striped table-condensed table-hover">
+        <thead>
+        <tr>
+            <th>Data Cadastro</th>
+            <th>Tipo</th>
+            <th>Chassi</th>
+            <th>Placa</th>
+            <th>Fabricante</th>
+            <th>Modelo</th>
+            <th>Estado</th>
+            <th>Município</th>
+            <th>Status</th>
+            <th width="20%" class="text-right">Operações</th>
+        </tr>
+        </thead>
+        <?php if ($this->registros && count($this->registros)) { ?>
+            <tbody>
+            <?php
+            foreach ($this->registros as $registro) {
+                $veiculo = $registro->findParentRow("TbVeiculo");
+                ?>
+                <tr>
+                    <td>
+                        <a href="<?php echo $this->url(array("action" => "viewveiculo", "id_transporte" => $this->transporte->getId(), "id" => $registro->getId())); ?>">
+                            <?php echo Escola_Util::formatData($registro->data_cadastro); ?>
+                        </a>
+                    </td>
+                    <td>
+                        <a href="<?php echo $this->url(array("action" => "viewveiculo", "id_transporte" => $this->transporte->getId(), "id" => $registro->getId())); ?>">
+                            <?php echo $veiculo->findParentRow("TbVeiculoTipo")->toString(); ?>
+                        </a>
+                    </td>
+                    <td>
+                        <a href="<?php echo $this->url(array("action" => "viewveiculo", "id_transporte" => $this->transporte->getId(), "id" => $registro->getId())); ?>">
+                            <?php echo $veiculo->chassi; ?>
+                        </a>
+                    </td>
+                    <td>
+                        <a href="<?php echo $this->url(array("action" => "viewveiculo", "id_transporte" => $this->transporte->getId(), "id" => $registro->getId())); ?>">
+                            <?php echo $veiculo->mostrar_placa(); ?>
+                        </a>
+                    </td>
+                    <td>
+                        <a href="<?php echo $this->url(array("action" => "viewveiculo", "id_transporte" => $this->transporte->getId(), "id" => $registro->getId())); ?>">
+                            <?php echo $veiculo->findParentRow("TbFabricante")->toString(); ?>
+                        </a>
+                    </td>
+                    <td>
+                        <a href="<?php echo $this->url(array("action" => "viewveiculo", "id_transporte" => $this->transporte->getId(), "id" => $registro->getId())); ?>">
+                            <?php echo $veiculo->modelo; ?>
+                        </a>
+                    </td>
+                    <td>
+                        <a href="<?php echo $this->url(array("action" => "viewveiculo", "id_transporte" => $this->transporte->getId(), "id" => $registro->getId())); ?>">
+                            <?php echo $veiculo->findParentRow("TbUf")->toString(); ?>
+                        </a>
+                    </td>
+                    <td>
+                        <a href="<?php echo $this->url(array("action" => "viewveiculo", "id_transporte" => $this->transporte->getId(), "id" => $registro->getId())); ?>">
+                            <?php echo $veiculo->findParentRow("TbMunicipio")->toString(); ?>
+                        </a>
+                    </td>
+                    <td>
+                        <a href="<?php echo $this->url(array("action" => "viewveiculo", "id_transporte" => $this->transporte->getId(), "id" => $registro->getId())); ?>">
+                            <?php echo $registro->findParentRow("TbTransporteVeiculoStatus")->toString(); ?>
+                        </a>
+                    </td>
+                    <td>
+                        <div class="btn-group pull-right">
+                            <?php if ($registro->baixa()) { ?>
+                                <a href="<?php echo $this->url(array("controller" => $this->getRequest()->getControllerName(),
+                                    "action" => "cancelarbaixa",
+                                    "id_transporte" => $this->transporte->getId(), "id" => $registro->getId())); ?>" class="btn btn-white link_confirma" data-toggle="tooltip" data-container="body"  title="Cancelar Baixa">
+                                    <i class="icon-remove-circle"></i>
+                                </a>
+                            <?php } ?>
+                            <a href="<?php echo $this->url(array("controller" => $this->getRequest()->getControllerName(),
+                                "action" => "licenca",
+                                "tipo" => "TV", "id_transporte" => $this->transporte->getId(), "chave" => $registro->getId())); ?>" class="btn btn-white" data-toggle="tooltip" data-container="body"  title="Serviços">
+                                <i class="icon-copy"></i>
+                            </a>
+                            <a href="<?php echo $this->url(array("controller" => $this->getRequest()->getControllerName(),
+                                "action" => "viewveiculo",
+                                "id_transporte" => $this->transporte->getId(), "id" => $registro->getId())); ?>" class="btn btn-white" data-toggle="tooltip" data-container="body"  title="Visualizar">
+                                <i class="icon-search"></i>
+                            </a>
+                            <a href="<?php echo $this->url(array("controller" => $this->getRequest()->getControllerName(),
+                                "action" => "editarveiculo",
+                                "id_transporte" => $this->transporte->getId(), "id" => $registro->getId())); ?>" class="btn btn-white" data-toggle="tooltip" data-container="body"  title="Alterar Veículo">
+                                <i class="icon-cog"></i>
+                            </a>
+                            <?php if ($registro->ativo()) { ?>
+                                <a href="<?php echo $this->url(array("controller" => $this->getRequest()->getControllerName(),
+                                    "action" => "baixa",
+                                    "id_transporte" => $this->transporte->getId(), "id" => $registro->getId())); ?>" class="btn btn-white" data-toggle="tooltip" data-container="body"  title="Baixa">
+                                    <i class="icon-thumbs-down"></i>
+                                </a>
+                                <?php if ($veiculo->sem_placa()) { ?>
+                                    <a href="<?php echo $this->url(array("controller" => $this->getRequest()->getControllerName(),
+                                        "action" => "placa",
+                                        "id_transporte" => $this->transporte->getId(), "id" => $registro->getId())); ?>" class="btn btn-white" data-toggle="tooltip" data-container="body"  title="Atribuir Placa do Veículo">
+                                        <i class="icon-edit-sign"></i>
+                                    </a>
+                                <?php } ?>
+                                <a href="<?php echo $this->url(array("controller" => $this->getRequest()->getControllerName(),
+                                    "action" => "excluirveiculo",
+                                    "id_transporte" => $this->transporte->getId(), "id" => $registro->getId())); ?>" class="btn btn-danger link_excluir" data-toggle="tooltip" data-container="body"  title="Excluir">
+                                    <i class="icon-trash"></i>
+                                </a>
+                            <?php } ?>
+                        </div>
+                    </td>
+                </tr>
+            <?php } ?>
+            </tbody>
+        <?php } ?>
+    </table>
+    <div class="panel-footer">
+        <?php if ($this->registros && count($this->registros)) {
+            echo $this->paginationControl($this->registros, "sliding", "minha_paginacao_control.phtml");
+        }
+        ?>
+    </div>
+</section>

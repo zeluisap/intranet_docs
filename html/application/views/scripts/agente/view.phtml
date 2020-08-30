@@ -1,0 +1,29 @@
+<section class="panel">
+    <header class="panel-heading">Visualizar Agente de Trânsito</header>
+    <div class="panel-body">
+        <dl class="dl-horizontal">
+            <dt>ID:</dt>
+            <dd><?php echo $this->registro->getId(); ?></dd>
+        </dl>
+        <dl class="dl-horizontal">
+            <dt>Código:</dt>
+            <dd><?php echo $this->registro->codigo; ?></dd>
+        </dl>
+        <dl class="dl-horizontal">
+            <dt>Matrícula:</dt>
+            <dd><?php echo $this->funcionario->matricula; ?></dd>
+        </dl>
+        <dl class="dl-horizontal">
+            <dt>C.P.F.:</dt>
+            <dd><?php echo Escola_Util::formatCpf($this->pf->cpf); ?></dd>
+        </dl>
+        <dl class="dl-horizontal">
+            <dt>Nome:</dt>
+            <dd><?php echo $this->pf->nome; ?></dd>
+        </dl>
+        <dl class="dl-horizontal">
+            <dt>Cargo:</dt>
+            <dd><?php echo $this->funcionario->findParentRow("TbCargo")->toString(); ?></dd>
+        </dl>
+    </div>
+</section>
